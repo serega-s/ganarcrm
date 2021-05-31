@@ -13,6 +13,14 @@ class Plan(models.Model):
 
 
 class Team(models.Model):
+    PLAN_ACTIVE = 'active'
+    PLAN_CANCELLED = 'cancelled'
+
+    CHOICES_PLAN_STATUS = (
+        (PLAN_ACTIVE, 'Active'),
+        (PLAN_CANCELLED, 'Cancelled'),
+    )
+
     name = models.CharField(max_length=255)
     members = models.ManyToManyField(User, related_name='teams')
     created_by = models.ForeignKey(
@@ -20,3 +28,5 @@ class Team(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     plan = models.ForeignKey(Plan, related_name='teams',
                              on_delete=models.SET_NULL, null=True, blank=True)
+    plan_status = models.CharField(max_length=20, choices=CHOICES_PLAN_STATUS, default=PLAN_ACTIVE)
+    stipe_customer_id = models.CharField(max)
