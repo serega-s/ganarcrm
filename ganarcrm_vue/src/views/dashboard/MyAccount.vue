@@ -22,28 +22,22 @@
 
 <script>
 import axios from "axios"
+
 export default {
   name: "MyAccount",
+  mounted(){
+    document.title = "GanarCRM: Team"
+  },
   methods: {
-    async logout() {
-      await axios
-        .post("/api/v1/token/logout/")
-        .then((response) => {
-          console.log("Logged out")
-        })
-        .catch((error) => {
-          console.log(JSON.stringify(error))
-        })
-
-      axios.defaults.headers.common["Authorization"] = ""
-      localStorage.removeItem("token")
-      localStorage.removeItem("username")
-      localStorage.removeItem("userid")
-      localStorage.removeItem("team_name")
-      localStorage.removeItem("team_id")
-      this.$store.commit("removeToken")
-
-      this.$router.push("/log-in")
+    logout() {
+      this.$store.dispatch("logout").then(
+        () => {
+          this.$router.push({ name: "LogIn" })
+        },
+        (error) => {
+          console.log(error.response)
+        }
+      )
     },
   },
 }

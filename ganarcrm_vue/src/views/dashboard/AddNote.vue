@@ -43,6 +43,9 @@ export default {
       client_id: this.$route.params.id,
     }
   },
+  mounted() {
+    document.title = "GanarCRM: Add Note"
+  },
   methods: {
     async submitForm() {
       this.$store.commit("setIsLoading", true)

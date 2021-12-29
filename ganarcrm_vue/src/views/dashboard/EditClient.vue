@@ -88,6 +88,7 @@ export default {
     }
   },
   mounted() {
+    document.title = "GanarCRM: Edit Client"
     this.getClient()
   },
   methods: {

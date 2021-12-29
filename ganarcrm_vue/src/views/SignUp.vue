@@ -13,6 +13,7 @@
                 name="email"
                 class="input"
                 v-model="username"
+                placeholder="Email"
               />
             </div>
           </div>
@@ -25,6 +26,7 @@
                 name="password1"
                 class="input"
                 v-model="password1"
+                placeholder="Password"
               />
             </div>
           </div>
@@ -37,7 +39,18 @@
                 name="password2"
                 class="input"
                 v-model="password2"
+                placeholder="Re-password"
               />
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="control">
+              <p>
+                Have an account?
+                <router-link :to="{ name: 'LogIn' }">Log in</router-link> to
+                continue
+              </p>
             </div>
           </div>
 
@@ -74,17 +87,13 @@ export default {
     async submitForm() {
       this.errors = []
 
-      if (this.username === "") {
-        this.errors.push("The username is missing!")
-      }
-      if (this.password1 === "") {
-        this.errors.push("The password is too short!")
-      }
-      if (this.password1 !== this.password2) {
-        this.errors.push("The passwords are not matching!")
-      }
-
-      if (!this.errors.length) {
+      if (!this.username) {
+        this.errors.push("Username field is missing!")
+      } else if (!this.password1 || this.password1.length < 8) {
+        this.errors.push("Password must contain at least 8 characters")
+      } else if (this.password1 !== this.password2) {
+        this.errors.push("Passwords don't match!")
+      } else if (!this.errors.length) {
         this.$store.commit("setIsLoading", true)
         const formData = {
           username: this.username,
@@ -106,14 +115,12 @@ export default {
             this.$router.push("/log-in")
           })
           .catch((error) => {
-            if (error.response) {
+            if (error.response.data) {
               for (const property in error.response.data) {
-                this.errors.push(
-                  `${property}: ${error.response.data[property]}`
-                )
+                this.errors.push(`${error.response.data[property]}`)
               }
-            } else if (error.message) {
-              this.errors.push("Something went wrong. Please try again!")
+            } else {
+              this.errors.push("Unable to sign up with bad credentials.")
             }
           })
         this.$store.commit("setIsLoading", false)

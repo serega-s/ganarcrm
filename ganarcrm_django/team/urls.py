@@ -2,16 +2,23 @@ from django.db.models import base
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from .views import TeamViewSet, UserDetail,add_member, get_my_team, get_stripe_pub_key, upgrade_plan
+from . import views
 
 router = DefaultRouter()
-router.register('teams', TeamViewSet, basename='teams')
+router.register('teams', views.TeamViewSet, basename='teams')
 
 urlpatterns = [
-    path('teams/member/<int:pk>/', UserDetail.as_view(), name='userdetail'),
-    path('teams/get_my_team/', get_my_team, name="get_my_team"),
-    path('teams/add_member/', add_member, name="add_member"),
-    path('teams/upgrade_plan/', upgrade_plan, name="upgrade_plan"),
-    path('stripe/get_stipe_pub_key/', get_stripe_pub_key, name="get_stripe_pub_key"),
+    path('teams/member/<int:pk>/', views.UserDetail.as_view(), name='userdetail'),
+    path('teams/get_my_team/', views.get_my_team),
+    path('teams/add_member/', views.add_member),
+    path('teams/upgrade_plan/', views.upgrade_plan),
+    path('teams/cancel_plan/', views.cancel_plan),
+    path('stripe/get_stipe_pub_key/',
+         views.get_stripe_pub_key),
+    path('stripe/create_checkout_session/',
+         views.create_checkout_session_and_upgrade_plan),
+    path('stripe/webhook/', views.stripe_webhook),
+    path('stripe/check_session/', views.check_session),
+
     path('', include(router.urls)),
 ]

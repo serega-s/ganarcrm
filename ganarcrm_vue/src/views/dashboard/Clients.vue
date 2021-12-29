@@ -18,7 +18,7 @@
         <form @submit.prevent="getClients">
           <div class="field has-addons">
             <div class="control">
-              <input type="text" class="input" v-model="query" />
+              <input type="text" class="input" v-model="query" placeholder="Client Name" />
             </div>
             <div class="control">
               <button class="button is-success">Search</button>
@@ -92,6 +92,7 @@ export default {
     }
   },
   mounted() {
+    document.title = "GanarCRM: Clients"
     this.getClients()
   },
   methods: {
@@ -101,7 +102,7 @@ export default {
     },
     goToPreviousPage() {
       this.currentPage -= 1
-      this.getСclients()
+      this.getСlients()
     },
     async getClients() {
       this.$store.commit("setIsLoading", true)

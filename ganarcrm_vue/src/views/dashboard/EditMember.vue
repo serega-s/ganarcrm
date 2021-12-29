@@ -13,6 +13,7 @@
                 type="text"
                 name="name"
                 class="input"
+                placeholder="First Name"
                 v-model="user.first_name"
               />
             </div>
@@ -25,6 +26,7 @@
                 type="text"
                 name="name"
                 class="input"
+                placeholder="Last Name"
                 v-model="user.last_name"
               />
             </div>
@@ -52,6 +54,7 @@ export default {
     }
   },
   mounted() {
+    document.title = "GanarCRM: Edit Member"
     this.getUser()
   },
   methods: {
@@ -61,7 +64,7 @@ export default {
       const userID = this.$route.params.id
 
       await axios
-        .put(`/api/v1/teams/member/${userID}`, this.user)
+        .put(`/api/v1/teams/member/${userID}/`, this.user)
         .then((response) => {
           toast({
             message: "The user was updated",
@@ -81,18 +84,15 @@ export default {
     },
     async getUser() {
       this.$store.commit("setIsLoading", true)
-
       const userID = this.$route.params.id
-
-      axios
-        .get(`/api/v1/teams/member/${userID}`)
+      await axios
+        .get(`/api/v1/teams/member/${userID}/`)
         .then((response) => {
-          this.note = response.data
+          this.user = response.data
         })
         .catch((error) => {
           console.log(error)
         })
-
       this.$store.commit("setIsLoading", false)
     },
   },

@@ -132,6 +132,7 @@ export default {
     }
   },
   mounted() {
+    document.title = "GanarCRM: Edit Lead"
     this.getLead()
     this.getTeam()
   },

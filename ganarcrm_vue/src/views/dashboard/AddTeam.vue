@@ -9,7 +9,13 @@
         <div class="field">
           <label for="company">Team name</label>
           <div class="control">
-            <input type="text" name="company" class="input" v-model="name" />
+            <input
+              placeholder="Team Name"
+              type="text"
+              name="company"
+              class="input"
+              v-model="name"
+            />
           </div>
         </div>
 
@@ -33,6 +39,9 @@ export default {
       name: "",
     }
   },
+  mounted() {
+    document.title = "GanarCRM: Add Team"
+  },
   methods: {
     async submitForm() {
       this.$store.commit("setIsLoading", true)
@@ -53,9 +62,12 @@ export default {
             position: "bottom-right",
           })
 
-          this.$store.commit('setTeam', {'id': response.data.id, 'name': this.name})
+          this.$store.commit("setTeam", {
+            id: response.data.id,
+            name: this.name,
+          })
 
-          this.$router.push("/dasbhoard/teams")
+          this.$router.push("/dashboard/team")
         })
         .catch((error) => {
           console.log(error)

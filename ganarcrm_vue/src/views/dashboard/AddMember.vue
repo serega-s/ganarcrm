@@ -71,6 +71,9 @@ export default {
       errors: [],
     }
   },
+  mounted() {
+    document.title = "GanarCRM: Add Member"
+  },
   methods: {
     async submitForm() {
       this.errors = []

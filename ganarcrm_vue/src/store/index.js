@@ -1,13 +1,17 @@
 import { createStore } from "vuex"
+import AuthService from "../services/auth.service"
+import UserService from "../services/user.service"
 
 export default createStore({
   state: {
     isLoading: false,
-    isAuthenticated: false,
-    token: "",
     user: {
       id: 0,
+      token: "",
+      isAuthenticated: false,
       username: "",
+      accessToken: "",
+      refreshToken: "",
     },
     team: {
       id: 0,
@@ -18,10 +22,21 @@ export default createStore({
     },
   },
   mutations: {
+    setToken(state, { access, refresh }) {
+      state.user.isAuthenticated = true
+      state.user.accessToken = access
+      state.user.refreshToken = refresh
+    },
+    removeToken(state) {
+      state.user.accessToken = ""
+      state.user.refreshToken = ""
+      state.user.isAuthenticated = false
+    },
     initializeStore(state) {
-      if (localStorage.getItem("token")) {
-        state.token = localStorage.getItem("token")
-        state.isAuthenticated = true
+      if (localStorage.getItem("accessToken")) {
+        state.user.accessToken = localStorage.getItem("accessToken")
+        state.user.refreshToken = localStorage.getItem("refreshToken")
+        state.user.isAuthenticated = true
         state.user.username = localStorage.getItem("username")
         state.user.id = localStorage.getItem("userid")
         state.team.name = localStorage.getItem("team_name")
@@ -30,8 +45,10 @@ export default createStore({
         state.team.max_clients = localStorage.getItem("team_max_clients")
         state.team.max_leads = localStorage.getItem("team_max_leads")
       } else {
-        state.token = ""
-        state.isAuthenticated = false
+        // state.user = {}
+        state.user.accessToken = ""
+        state.user.refreshToken = ""
+        state.user.isAuthenticated = false
         state.user.id = 0
         state.user.username = ""
         state.team.name = ""
@@ -44,17 +61,7 @@ export default createStore({
     setIsLoading(state, status) {
       state.isLoading = status
     },
-    setToken(state, token) {
-      state.token = token
-      state.isAuthenticated = true
-    },
-    removeToken(state) {
-      state.token = ""
-      state.isAuthenticated = false
-    },
-    setUser(state, user) {
-      state.user = user
-    },
+
     setTeam(state, team) {
       state.team = team
 
@@ -64,7 +71,57 @@ export default createStore({
       localStorage.setItem("team_max_leads", team.max_leads)
       localStorage.setItem("team_max_clients", team.max_clients)
     },
+    // setToken(state, token) {
+    //   state.user.token = token
+    //   state.user.isAuthenticated = true
+    // },
+    // removeToken(state) {
+    //   state.user.token = ""
+    //   state.user.isAuthenticated = false
+    // },
+    setUser(state, user) {
+      state.user = user
+    },
   },
-  actions: {},
-  modules: {},
+  actions: {
+    login({ commit, dispatch }, user) {
+      return AuthService.login(user).then(
+        (response) => {
+          commit("setToken", {
+            accessToken: response.data.access,
+            refreshToken: response.data.refresh,
+          })
+
+          return Promise.resolve(user)
+        },
+        (error) => {
+          commit("removeToken")
+          return Promise.reject(error)
+        }
+      )
+    },
+    logout({ commit }) {
+      AuthService.logout()
+      commit("removeToken")
+    },
+    register({ commit }, user) {
+      return AuthService.register(user).then(
+        (response) => {
+          return Promise.resolve(response.data)
+        },
+        (error) => {
+          return Promise.reject(error)
+        }
+      )
+    },
+    getMe({ commit }) {
+      return UserService.getMe().then((response) => {
+        commit("setUser", response.data)
+        return Promise.resolve(response.data)
+      })
+    },
+  },
+  modules: {
+    // auth,
+  },
 })

@@ -3,12 +3,16 @@
     <div class="columns is-multiline">
       <div class="column is-12">
         <h1 class="title">{{ client.name }}</h1>
-
-        <router-link
-          :to="{ name: 'EditClient', params: { id: client.id } }"
-          class="button is-light"
-          >Edit</router-link
-        >
+        <div class="buttons">
+          <button @click="deleteClient" class="button is-danger">
+            Delete client
+          </button>
+          <router-link
+            :to="{ name: 'EditClient', params: { id: client.id } }"
+            class="button is-light"
+            >Edit</router-link
+          >
+        </div>
       </div>
 
       <div class="column is-6">
@@ -49,7 +53,7 @@
               name: 'EditNote',
               params: { id: client.id, note_id: note.id },
             }"
-            class="button is-success mt-6"
+            class="button is-light is-info mt-6"
             >Edit note</router-link
           >
         </div>
@@ -69,9 +73,28 @@ export default {
     }
   },
   mounted() {
+    document.title = "GanarCRM: Client"
     this.getClient()
   },
   methods: {
+    async deleteClient() {
+      this.$store.commit("setIsLoading", true)
+
+      const clientID = this.$route.params.id
+
+      axios
+        .post(`/api/v1/clients/delete_client/${clientID}/`)
+        .then((response) => {
+          console.log(response.data)
+
+          this.$router.push({ name: "Clients" })
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+
+      this.$store.commit("setIsLoading", false)
+    },
     async getClient() {
       this.$store.commit("setIsLoading", true)
 

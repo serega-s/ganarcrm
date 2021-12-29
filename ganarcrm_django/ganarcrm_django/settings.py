@@ -28,7 +28,10 @@ STRIPE_SECRET_KEY = 'sk_test_51IvhxnKNo34N6RzwNOB0rcUgi8UMVEdtTpNukWmF8WVM0Ch7DG
 
 STRIPE_PRICE_ID_SMALL_TEAM = 'price_1Ivi3OKNo34N6RzwZUZu3fTf'
 STRIPE_PRICE_ID_BIG_TEAM = 'price_1Ivi60KNo34N6RzwmXAWvlSP'
+STRIPE_WEBHOOK_KEY = 'whsec_DKU4gG6UAtkGrWis07Zpx5ggSIoaxY1F'
 
+FRONTEND_WEBSITE_SUCCESS_URL = 'http://localhost:8080/dashboard/team/plans/thankyou/'
+FRONTEND_WEBSITE_CANCEL_URL = 'http://localhost:8080/dashboard/team/plans/'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -41,10 +44,11 @@ CORS_ALLOWED_ORIGINS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
+        # 'rest_framework.permissions.IsAuthenticated',
     ),
 }
 
@@ -62,6 +66,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'djoser',
+    'rest_framework_simplejwt',
 
     'lead.apps.LeadConfig',
     'team.apps.TeamConfig',

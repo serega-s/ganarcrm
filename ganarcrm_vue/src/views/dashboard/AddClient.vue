@@ -9,7 +9,13 @@
           <div class="field">
             <label for="name">Name</label>
             <div class="control">
-              <input type="text" name="name" class="input" v-model="name" />
+              <input
+                type="text"
+                name="name"
+                class="input"
+                v-model="name"
+                placeholder="Client Name"
+              />
             </div>
           </div>
 
@@ -21,6 +27,7 @@
                 name="contact_person"
                 class="input"
                 v-model="contact_person"
+                placeholder="Contact Person"
               />
             </div>
           </div>
@@ -28,14 +35,26 @@
           <div class="field">
             <label for="email">Email</label>
             <div class="control">
-              <input type="email" name="email" class="input" v-model="email" />
+              <input
+                type="email"
+                name="email"
+                class="input"
+                v-model="email"
+                placeholder="Email"
+              />
             </div>
           </div>
 
           <div class="field">
             <label for="phone">Phone</label>
             <div class="control">
-              <input type="number" name="phone" class="input" v-model="phone" />
+              <input
+                type="number"
+                name="phone"
+                class="input"
+                v-model="phone"
+                placeholder="Email"
+              />
             </div>
           </div>
 
@@ -46,6 +65,7 @@
                 type="text"
                 name="website"
                 class="input"
+                placeholder="Website"
                 v-model="website"
               />
             </div>
@@ -75,6 +95,9 @@ export default {
       phone: "",
       website: "",
     }
+  },
+  mounted() {
+    document.title = "GanarCRM: Add Client"
   },
   methods: {
     async submitForm() {

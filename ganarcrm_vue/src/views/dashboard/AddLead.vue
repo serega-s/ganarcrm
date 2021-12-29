@@ -2,7 +2,7 @@
   <div class="container">
     <div class="columns is-multiline">
       <div class="column is-12">
-        <h1 class="title">Add client</h1>
+        <h1 class="title">Add lead</h1>
       </div>
       <div class="column is-12">
         <form @submit.prevent="submitForm">
@@ -13,6 +13,7 @@
                 type="text"
                 name="company"
                 class="input"
+                placeholder="Company Name"
                 v-model="company"
               />
             </div>
@@ -25,6 +26,7 @@
                 type="text"
                 name="contact_person"
                 class="input"
+                placeholder="Contact person"
                 v-model="contact_person"
               />
             </div>
@@ -33,14 +35,14 @@
           <div class="field">
             <label for="email">Email</label>
             <div class="control">
-              <input type="email" name="email" class="input" v-model="email" />
+              <input type="email" name="email" class="input" v-model="email" placeholder="Email" />
             </div>
           </div>
 
           <div class="field">
             <label for="phone">Phone</label>
             <div class="control">
-              <input type="number" name="phone" class="input" v-model="phone" />
+              <input type="number" name="phone" class="input" v-model="phone" placeholder="Phone" />
             </div>
           </div>
 
@@ -52,6 +54,7 @@
                 name="website"
                 class="input"
                 v-model="website"
+                placeholder="Website"
               />
             </div>
           </div>
@@ -64,6 +67,7 @@
                 name="confidence"
                 class="input"
                 v-model="confidence"
+                placeholder="Confidence"
               />
             </div>
           </div>
@@ -136,6 +140,9 @@ export default {
       status: "",
       priority: "",
     }
+  },
+  mounted() {
+    document.title = "GanarCRM: Add Lead"
   },
   methods: {
     async submitForm() {

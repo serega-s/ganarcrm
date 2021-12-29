@@ -25,18 +25,16 @@ export default {
   },
   beforeCreate() {
     this.$store.commit("initializeStore")
+    const accessToken = this.$store.state.user.accessToken
 
-    console.log(this.$store.state.user.username)
-
-    if (this.$store.state.token) {
-      axios.defaults.headers.common["Authorization"] =
-        "Token " + this.$store.state.token
+    if (accessToken) {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + accessToken
     } else {
       axios.defaults.headers.common["Authorization"] = ""
     }
 
     if (!this.$store.state.team.id) {
-      this.$router.push('/dashboard/add-team')
+      this.$router.push("/dashboard/add-team")
     }
   },
 }
@@ -73,7 +71,7 @@ export default {
 .is-loading-bar {
   height: 0;
   overflow: hidden;
-  transition: all .3s;
+  transition: all 0.3s;
 
   &.is-loading {
     height: 80px;

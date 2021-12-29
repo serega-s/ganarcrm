@@ -19,7 +19,7 @@
         <form @submit.prevent="getLeads">
           <div class="field has-addons">
             <div class="control">
-              <input type="text" class="input" v-model="query" />
+              <input type="text" class="input" v-model="query" placeholder="Lead Name" />
             </div>
             <div class="control">
               <button class="button is-success">Search</button>
@@ -46,8 +46,7 @@
               <td>
                 <template v-if="lead.assigned_to">
                   <p>
-                    <strong>Assigned to: </strong
-                    >{{ lead.assigned_to.first_name }}
+                    {{ lead.assigned_to.first_name }}
                     {{ lead.assigned_to.last_name }}
                   </p>
                 </template>
@@ -98,6 +97,7 @@ export default {
     }
   },
   mounted() {
+    document.title = "GanarCRM: Leads"
     this.getLeads()
   },
   methods: {

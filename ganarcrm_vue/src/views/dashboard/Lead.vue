@@ -8,6 +8,7 @@
           <button @click="convertToClient" class="button is-info">
             Convert to client
           </button>
+          <button @click="deleteLead" class="button is-danger">Delete</button>
         </div>
 
         <router-link
@@ -61,9 +62,28 @@ export default {
     }
   },
   mounted() {
+    document.title = "GanarCRM: Lead"
     this.getLead()
   },
   methods: {
+    async deleteLead() {
+      this.$store.commit("setIsLoading", true)
+
+      const leadID = this.$route.params.id
+
+      axios
+        .post(`/api/v1/leads/delete_lead/${leadID}/`)
+        .then((response) => {
+          console.log(response.data)
+
+          this.$router.push({ name: "Leads" })
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+
+      this.$store.commit("setIsLoading", false)
+    },
     async getLead() {
       this.$store.commit("setIsLoading", true)
 
@@ -82,22 +102,19 @@ export default {
     },
     async convertToClient() {
       this.$store.commit("setIsLoading", true)
-
       const leadID = this.$route.params.id
       const data = {
         lead_id: leadID,
       }
-      axios
-        .post(`/api/v1/convert_lead_to_client/${leadID}/`, data)
+      await axios
+        .post(`/api/v1/convert_lead_to_client/`, data)
         .then((response) => {
           console.log("converted to client")
-
-          this.$router.push({ name: "Clients" })
+          this.$router.push("/dashboard/clients")
         })
         .catch((error) => {
           console.log(error)
         })
-
       this.$store.commit("setIsLoading", false)
     },
   },

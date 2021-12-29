@@ -13,6 +13,7 @@
                 name="email"
                 class="input"
                 v-model="username"
+                placeholder="Email"
               />
             </div>
           </div>
@@ -25,7 +26,18 @@
                 name="password"
                 class="input"
                 v-model="password"
+                placeholder="Password"
               />
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="control">
+              <p>
+                Do not have an account?
+                <router-link :to="{ name: 'SignUp' }">Sign up</router-link> to
+                create
+              </p>
             </div>
           </div>
 
@@ -46,6 +58,9 @@
 
 <script>
 import axios from "axios"
+import UserService from "../services/user.service"
+import TeamService from "../services/team.service"
+import AuthService from "../services/auth.service"
 
 export default {
   name: "LogIn",
@@ -56,6 +71,9 @@ export default {
       errors: [],
     }
   },
+  mounted() {
+    document.title = "GanarCRM: Log In"
+  },
   methods: {
     async submitForm() {
       this.$store.commit("setIsLoading", true)
@@ -63,49 +81,51 @@ export default {
       axios.defaults.headers.common["Authorization"] = ""
       localStorage.removeItem("token")
 
-      const formData = {
-        username: this.username,
-        password: this.password,
-      }
+      this.errors = []
 
-      await axios
-        .post("/api/v1/token/login/", formData)
-        .then((response) => {
-          const token = response.data.auth_token
+      if (!this.username) {
+        this.errors.push("Username field is missing!")
+      } else if (!this.password) {
+        this.errors.push("Password field is missing!")
+      } else if (!this.errors.length) {
+        const formData = {
+          username: this.username,
+          password: this.password,
+        }
 
-          this.$store.commit("setToken", token)
-
-          axios.defaults.headers.common["Authorization"] = "Token " + token
-
-          localStorage.setItem("token", token)
-        })
-        .catch((error) => {
-          if (error.response) {
-            for (const property in error.response.data) {
-              this.errors.push(`${property}: ${error.response.data[property]}`)
+        await AuthService.login(formData)
+          .then((response) => {
+            const { access, refresh } = response.data
+            if (access && refresh) {
+              this.$store.commit("setToken", { access, refresh })
+              axios.defaults.headers.common["Authorization"] =
+                "Bearer " + access
+              localStorage.setItem("accessToken", access)
+              localStorage.setItem("refreshToken", refresh)
             }
-          } else if (error.message) {
-            this.errors.push("Something went wrong. Please try again!")
-          }
-        })
+          })
+          .catch((error) => {
+            this.$store.commit("setIsLoading", false)
+            if (error.response) {
+              for (const property in error.response.data) {
+                this.errors.push(`${error.response.data[property]}`)
+              }
+            } else {
+              this.errors.push("Unable to sign in with bad credentials.")
+            }
+          })
 
-      await axios
-        .get("/api/v1/users/me")
-        .then((response) => {
+        await UserService.getMe().then((response) => {
           this.$store.commit("setUser", {
             id: response.data.id,
             username: response.data.username,
+            isAuthenticated: true,
           })
           localStorage.setItem("username", response.data.username)
           localStorage.setItem("userid", response.data.id)
         })
-        .catch((error) => {
-          console.log(error)
-        })
 
-      await axios
-        .get("/api/v1/teams/get_my_team")
-        .then((response) => {
+        TeamService.getMyTeam().then((response) => {
           this.$store.commit("setTeam", {
             id: response.data.id,
             name: response.data.name,
@@ -113,13 +133,11 @@ export default {
             max_leads: response.data.plan.max_leads,
             max_clients: response.data.plan.max_clients,
           })
+          this.$router.push({ name: "MyAccount" })
+        })
 
-          this.$router.push("/dashboard/my-account")
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-      this.$store.commit("setIsLoading", false)
+        this.$store.commit("setIsLoading", false)
+      }
     },
   },
 }

@@ -39,5 +39,6 @@ class TeamSerializer(serializers.ModelSerializer):
             "name",
             "members",
             'created_by',
+            'plan_end_date',
             "plan"
         )

@@ -47,6 +47,7 @@ export default {
     }
   },
   mounted() {
+    document.title = "GanarCRM: Edit Note"
     this.getNote()
   },
   methods: {
