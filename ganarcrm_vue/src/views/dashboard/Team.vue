@@ -20,7 +20,7 @@
         <hr />
 
         <template v-if="team.created_by.id === parseInt($store.state.user.id)">
-          <router-link :to="{ name: 'AddMember' }" class="button is-primary"
+          <router-link :to="{ name: 'AddMember' }" class="button is-primary is-light is-outlined"
             >Add Member</router-link
           >
         </template>
@@ -70,12 +70,11 @@ export default {
       await axios
         .get("/api/v1/teams/get_my_team/")
         .then((response) => {
-          console.log('TEAM:', response.data)
-          
+          console.log('getMyTeam', response)
           this.team = response.data
         })
         .catch((error) => {
-          console.log(error)
+          console.log(error.response)
         })
       this.$store.commit("setIsLoading", false)
     },

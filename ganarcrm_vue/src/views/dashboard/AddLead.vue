@@ -4,7 +4,7 @@
       <div class="column is-12">
         <h1 class="title">Add lead</h1>
       </div>
-      <div class="column is-12">
+      <div class="column is-half is-offset-one-quarter">
         <form @submit.prevent="submitForm">
           <div class="field">
             <label for="company">Company</label>
@@ -15,6 +15,7 @@
                 class="input"
                 placeholder="Company Name"
                 v-model="company"
+                required
               />
             </div>
           </div>
@@ -28,6 +29,7 @@
                 class="input"
                 placeholder="Contact person"
                 v-model="contact_person"
+                required
               />
             </div>
           </div>
@@ -35,14 +37,14 @@
           <div class="field">
             <label for="email">Email</label>
             <div class="control">
-              <input type="email" name="email" class="input" v-model="email" placeholder="Email" />
+              <input type="email" name="email" class="input" v-model="email" placeholder="Email" required />
             </div>
           </div>
 
           <div class="field">
             <label for="phone">Phone</label>
             <div class="control">
-              <input type="number" name="phone" class="input" v-model="phone" placeholder="Phone" />
+              <input type="number" name="phone" class="input" v-model="phone" placeholder="Phone" required />
             </div>
           </div>
 
@@ -55,6 +57,7 @@
                 class="input"
                 v-model="website"
                 placeholder="Website"
+                
               />
             </div>
           </div>
@@ -68,6 +71,7 @@
                 class="input"
                 v-model="confidence"
                 placeholder="Confidence"
+                required
               />
             </div>
           </div>
@@ -88,7 +92,7 @@
             <label for="status">Status</label>
             <div class="control">
               <div class="select">
-                <select name="status" v-model="status">
+                <select name="status" v-model="status" required>
                   <option value="new">New</option>
                   <option value="contacted">Contacted</option>
                   <option value="inprogress">In progress</option>
@@ -103,7 +107,7 @@
             <label for="priority">Priority</label>
             <div class="control">
               <div class="select">
-                <select name="priority" v-model="priority">
+                <select name="priority" v-model="priority" required>
                   <option value="low">Low</option>
                   <option value="medium">Medium</option>
                   <option value="high">High</option>
@@ -114,7 +118,7 @@
 
           <div class="field">
             <div class="control">
-              <button class="button is-success">Submit</button>
+              <button class="button is-success is-outlined">Submit</button>
             </div>
           </div>
         </form>
@@ -174,7 +178,7 @@ export default {
           this.$router.push("/dashboard/leads")
         })
         .catch((error) => {
-          console.log(error)
+          console.log(error.response)
         })
 
       this.$store.commit("setIsLoading", false)

@@ -5,7 +5,7 @@
         <h1 class="title">Add member</h1>
       </div>
 
-      <div class="column is-12">
+      <div class="column is-half is-offset-one-quarter">
         <form @submit.prevent="submitForm">
           <div class="field">
             <label for="email">Email</label>
@@ -14,7 +14,9 @@
                 type="email"
                 name="email"
                 class="input"
+                placeholder="Email"
                 v-model="username"
+                required
               />
             </div>
           </div>
@@ -25,8 +27,10 @@
               <input
                 type="password"
                 name="password1"
+                placeholder="Password"
                 class="input"
                 v-model="password1"
+                required
               />
             </div>
           </div>
@@ -37,8 +41,10 @@
               <input
                 type="password"
                 name="password2"
+                placeholder="Repeat Password"
                 class="input"
                 v-model="password2"
+                required
               />
             </div>
           </div>
@@ -49,7 +55,7 @@
 
           <div class="field">
             <div class="control">
-              <button class="button is-success">Submit</button>
+              <button class="button is-success is-outlined">Submit</button>
             </div>
           </div>
         </form>

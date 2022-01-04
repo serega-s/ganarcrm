@@ -9,7 +9,7 @@
           </button>
           <router-link
             :to="{ name: 'EditClient', params: { id: client.id } }"
-            class="button is-light"
+            class="mx-5"
             >Edit</router-link
           >
         </div>
@@ -39,7 +39,7 @@
 
         <router-link
           :to="{ name: 'AddNote', params: { id: client.id } }"
-          class="button is-success mb-6"
+          class="button is-info is-light is-outlined mb-6"
           >Add note</router-link
         >
 

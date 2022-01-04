@@ -47,7 +47,7 @@
 
           <div class="field">
             <div class="control">
-              <button class="button is-success">Submit</button>
+              <button class="button is-success is-outlined">Submit</button>
             </div>
           </div>
         </form>
@@ -85,8 +85,10 @@ export default {
 
       if (!this.username) {
         this.errors.push("Username field is missing!")
+        this.$store.commit("setIsLoading", false)
       } else if (!this.password) {
         this.errors.push("Password field is missing!")
+        this.$store.commit("setIsLoading", false)
       } else if (!this.errors.length) {
         const formData = {
           username: this.username,
@@ -95,6 +97,7 @@ export default {
 
         await AuthService.login(formData)
           .then((response) => {
+            console.log('login', response)
             const { access, refresh } = response.data
             if (access && refresh) {
               this.$store.commit("setToken", { access, refresh })
@@ -116,6 +119,7 @@ export default {
           })
 
         await UserService.getMe().then((response) => {
+          console.log('getMe', response)
           this.$store.commit("setUser", {
             id: response.data.id,
             username: response.data.username,
@@ -125,16 +129,22 @@ export default {
           localStorage.setItem("userid", response.data.id)
         })
 
-        TeamService.getMyTeam().then((response) => {
-          this.$store.commit("setTeam", {
-            id: response.data.id,
-            name: response.data.name,
-            plan: response.data.plan.name,
-            max_leads: response.data.plan.max_leads,
-            max_clients: response.data.plan.max_clients,
+        await TeamService.getMyTeam()
+          .then((response) => {
+            console.log('getMyTeam', response)
+
+            this.$store.commit("setTeam", {
+              id: response.data.id,
+              name: response.data.name,
+              plan: response.data.plan.name,
+              max_leads: response.data.plan.max_leads,
+              max_clients: response.data.plan.max_clients,
+            })
+            this.$router.push({ name: "MyAccount" })
           })
-          this.$router.push({ name: "MyAccount" })
-        })
+          .catch((error) => {
+            this.$router.push({ name: "AddTeam" })
+          })
 
         this.$store.commit("setIsLoading", false)
       }

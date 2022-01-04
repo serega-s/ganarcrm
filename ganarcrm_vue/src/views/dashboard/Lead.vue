@@ -5,15 +5,16 @@
         <h1 class="title">{{ lead.company }}</h1>
 
         <div class="buttons">
-          <button @click="convertToClient" class="button is-info">
+          <button
+            @click="convertToClient"
+            class="button is-info is-rounded is-outlined"
+          >
             Convert to client
           </button>
           <button @click="deleteLead" class="button is-danger">Delete</button>
         </div>
 
-        <router-link
-          :to="{ name: 'EditLead', params: { id: lead.id } }"
-          class="button is-light"
+        <router-link :to="{ name: 'EditLead', params: { id: lead.id } }"
           >Edit</router-link
         >
       </div>
@@ -23,16 +24,14 @@
           <h2 class="subtitle">Details</h2>
           <template v-if="lead.assigned_to">
             <p>
-              <strong
-                >{{ lead.assigned_to.first_name }}
-                {{ lead.assigned_to.last_name }}</strong
-              >
+              <strong>Assigned To: </strong>{{ lead.assigned_to.first_name }}
+              {{ lead.assigned_to.last_name }}
             </p>
           </template>
           <p><strong>Status: </strong>{{ lead.status }}</p>
           <p><strong>Priority: </strong>{{ lead.priority }}</p>
           <p><strong>Confidence: </strong>{{ lead.confidence }}</p>
-          <p><strong>Estimated value</strong>{{ lead.estimated_value }}</p>
+          <p><strong>Estimated value: </strong>{{ lead.estimated_value }}</p>
           <p><strong>Created at: </strong>{{ lead.created_at }}</p>
           <p><strong>Modified at: </strong>{{ lead.modified_at }}</p>
         </div>
@@ -45,7 +44,9 @@
           <p><strong>Contact person: </strong>{{ lead.contact_person }}</p>
           <p><strong>Email: </strong>{{ lead.email }}</p>
           <p><strong>Phone: </strong>{{ lead.phone }}</p>
-          <p><strong>Website: </strong>{{ lead.website }}</p>
+          <template v-if="lead.website">
+            <p><strong>Website: </strong>{{ lead.website }}</p>
+          </template>
         </div>
       </div>
     </div>

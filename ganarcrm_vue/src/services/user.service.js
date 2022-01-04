@@ -3,13 +3,20 @@ import authHeader from "./auth-header"
 
 class UserService {
   getMe() {
-    return axios.get("/api/v1/users/me/", { headers: authHeader() })
-    // .then((response) => {
-    //   localStorage.setItem("username", response.data.username)
-    //   localStorage.setItem("userid", response.data.id)
-    // })
+    const response = axios.get("/api/v1/users/me/", { headers: authHeader() })
+
+    return response
   }
-  editMember() {}
+  editMember(userID, user) {
+    const response = axios.put(`/api/v1/teams/member/${userID}/`, user)
+
+    return response
+  }
+  getUser(userID) {
+    const response = axios.get(`/api/v1/teams/member/${userID}/`)
+
+    return response
+  }
 }
 
 export default new UserService()

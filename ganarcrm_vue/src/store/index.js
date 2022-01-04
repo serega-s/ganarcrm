@@ -82,8 +82,15 @@ export default createStore({
     setUser(state, user) {
       state.user = user
     },
+    refreshToken(state, accessToken) {
+      state.user.isAuthenticated = true
+      state.user.accessToken = accessToken
+    },
   },
   actions: {
+    refreshToken({ commit }, accessToken) {
+      commit('refreshToken', accessToken);
+    },
     login({ commit, dispatch }, user) {
       return AuthService.login(user).then(
         (response) => {

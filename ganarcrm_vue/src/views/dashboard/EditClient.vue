@@ -4,7 +4,7 @@
       <div class="column is-12">
         <h1 class="title">Edit "{{ client.name }}"</h1>
       </div>
-      <div class="column is-12">
+      <div class="column is-half is-offset-one-quarter">
         <form @submit.prevent="submitForm">
           <div class="field">
             <label for="name">Name</label>
@@ -14,6 +14,7 @@
                 name="name"
                 class="input"
                 v-model="client.name"
+                required
               />
             </div>
           </div>
@@ -26,6 +27,7 @@
                 name="contact_person"
                 class="input"
                 v-model="client.contact_person"
+                required
               />
             </div>
           </div>
@@ -38,6 +40,7 @@
                 name="email"
                 class="input"
                 v-model="client.email"
+                required
               />
             </div>
           </div>
@@ -50,6 +53,7 @@
                 name="phone"
                 class="input"
                 v-model="client.phone"
+                required
               />
             </div>
           </div>
@@ -68,7 +72,7 @@
 
           <div class="field">
             <div class="control">
-              <button class="button is-success">Submit</button>
+              <button class="button is-success is-outlined">Submit</button>
             </div>
           </div>
         </form>

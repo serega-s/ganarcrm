@@ -1,8 +1,8 @@
 import axios from "axios"
 
 class AuthService {
-  async login(user) {
-    const response = await axios.post("/api/v1/token/", {
+  login(user) {
+    const response = axios.post("/api/v1/token/", {
       username: user.username,
       password: user.password,
     })
@@ -14,10 +14,10 @@ class AuthService {
     // }
     return response
   }
-  async logout() {
+  logout() {
     // const response = await axios.post("/api/v1/token/logout/")
-    delete axios.defaults.headers.common["Authorization"]
     localStorage.clear()
+    delete axios.defaults.headers.common["Authorization"]
   }
   register(user) {
     return axios.post("/api/v1/users/", {

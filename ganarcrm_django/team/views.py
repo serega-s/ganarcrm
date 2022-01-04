@@ -26,6 +26,7 @@ class TeamViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         obj = serializer.save(created_by=self.request.user)
         obj.members.add(self.request.user)
+        obj.plan = Plan.objects.get(name='Free')
         obj.save()
 
 

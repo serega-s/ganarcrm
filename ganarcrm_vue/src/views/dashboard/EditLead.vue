@@ -5,7 +5,7 @@
         <h1 class="title">Edit {{ lead.company }}</h1>
       </div>
 
-      <div class="column is-12">
+      <div class="column is-half is-offset-one-quarter">
         <form @submit.prevent="submitForm">
           <div class="field">
             <label>Company</label>
@@ -107,7 +107,7 @@
 
           <div class="field">
             <div class="control">
-              <button class="button is-success">Update</button>
+              <button class="button is-success is-outlined">Update</button>
             </div>
           </div>
         </form>

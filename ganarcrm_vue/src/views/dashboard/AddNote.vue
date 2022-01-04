@@ -1,10 +1,10 @@
 <template>
   <div class="container">
     <div class="columns is-multiline">
-      <div class="columns is-12">
+      <div class="column is-12">
         <h1 class="title">Add note</h1>
       </div>
-      <div class="column is-12">
+      <div class="column is-half is-offset-one-quarter">
         <form @submit.prevent="submitForm">
           <div class="field">
             <label for="name">Name</label>
@@ -22,7 +22,7 @@
 
           <div class="field">
             <div class="control">
-              <button class="button is-success">Submit</button>
+              <button class="button is-success is-outlined">Submit</button>
             </div>
           </div>
         </form>
@@ -34,6 +34,7 @@
 <script>
 import axios from "axios"
 import { toast } from "bulma-toast"
+import NoteService from "../../services/note.service"
 export default {
   name: "AddNote",
   data() {
@@ -56,8 +57,7 @@ export default {
         client_id: this.client_id,
       }
 
-      await axios
-        .post("/api/v1/notes/", note)
+      await NoteService.addNote(note)
         .then((response) => {
           toast({
             message: "The note was added",
@@ -71,9 +71,6 @@ export default {
             name: "Client",
             params: { id: this.$route.params.id },
           })
-        })
-        .catch((error) => {
-          console.log(error.response)
         })
 
       this.$store.commit("setIsLoading", false)

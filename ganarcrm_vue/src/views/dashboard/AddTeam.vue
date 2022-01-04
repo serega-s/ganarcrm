@@ -1,30 +1,33 @@
 <template>
   <div class="container">
     <div class="columns is-multiline">
-      <h1 class="title">Add team</h1>
-    </div>
+      <div class="column is-12">
+        <h1 class="title">Add team</h1>
+      </div>
 
-    <div class="column is-12">
-      <form @submit.prevent="submitForm">
-        <div class="field">
-          <label for="company">Team name</label>
-          <div class="control">
-            <input
-              placeholder="Team Name"
-              type="text"
-              name="company"
-              class="input"
-              v-model="name"
-            />
+      <div class="column is-half is-offset-one-quarter">
+        <form @submit.prevent="submitForm">
+          <div class="field">
+            <label for="company">Team name</label>
+            <div class="control">
+              <input
+                placeholder="Team Name"
+                type="text"
+                name="company"
+                class="input"
+                v-model="name"
+                required
+              />
+            </div>
           </div>
-        </div>
 
-        <div class="field">
-          <div class="control">
-            <button class="button is-success">Submit</button>
+          <div class="field">
+            <div class="control">
+              <button class="button is-success is-outlined">Submit</button>
+            </div>
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   </div>
 </template>
@@ -53,6 +56,16 @@ export default {
       await axios
         .post("/api/v1/teams/", team)
         .then((response) => {
+          console.log("addTeam", response)
+
+          this.$store.commit("setTeam", {
+            id: response.data.id,
+            name: response.data.name,
+            plan: response.data.plan.name,
+            max_leads: response.data.plan.max_leads,
+            max_clients: response.data.plan.max_clients,
+          })
+
           toast({
             message: "The team was added",
             type: "is-success",
@@ -60,11 +73,6 @@ export default {
             pauseOnHover: true,
             duration: 2000,
             position: "bottom-right",
-          })
-
-          this.$store.commit("setTeam", {
-            id: response.data.id,
-            name: this.name,
           })
 
           this.$router.push("/dashboard/team")

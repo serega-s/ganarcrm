@@ -4,69 +4,125 @@
       <div class="column is-12">
         <h1 class="title">Plans</h1>
       </div>
-
-      <div class="column is-4">
+      <FreePlan :cancelPlan="cancelPlan" />
+      <SmallTeamPlan :cancelPlan="cancelPlan" :subsribe="subscribe('smallteam')" />
+      <BigTeamPlan :cancelPlan="cancelPlan" :subsribe="subscribe('bigteam')" />
+      <!-- <div class="column is-4 has-text-centered">
         <div class="box">
           <h2 class="subtitle">Free</h2>
           <h4 class="is-size-4">$0</h4>
 
           <p>Max 5 clients</p>
           <p>Max 5 leads</p>
-
-          <button @click="cancelPlan" class="button is-primary">
-            Subscribe
-          </button>
+          <hr />
+          <template v-if="$store.state.team.plan === 'Free'">
+            <button class="button is-info is-rounded is-medium" disabled>
+              Subscribed
+            </button>
+          </template>
+          <template v-else>
+            <button
+              @click="cancelPlan"
+              class="button is-success is-rounded is-medium is-outlined"
+            >
+              Subscribe
+            </button>
+          </template>
         </div>
       </div>
 
-      <div class="column is-4">
+      <div class="column is-4 has-text-centered">
         <div class="box">
           <h2 class="subtitle">Small team</h2>
           <h4 class="is-size-4">$10</h4>
 
           <p>Max 15 clients</p>
           <p>Max 15 leads</p>
-
-          <button @click="subscribe('smallteam')" class="button is-primary">
-            Subscribe
-          </button>
+          <hr />
+          <template v-if="$store.state.team.plan === 'Small team'">
+            <button class="button is-info is-rounded is-medium" disabled>
+              Subscribed
+            </button>
+            <button
+              class="button is-medium is-rounded is-light is-danger"
+              @click="cancelPlan"
+            >
+              Cancel
+            </button>
+          </template>
+          <template v-else>
+            <button
+              @click="subscribe('smallteam')"
+              class="button is-success is-rounded is-medium is-outlined"
+            >
+              Subscribe
+            </button>
+          </template>
         </div>
       </div>
 
-      <div class="column is-4">
+      <div class="column is-4 has-text-centered">
         <div class="box">
           <h2 class="subtitle">Big team</h2>
           <h4 class="is-size-4">$25</h4>
 
           <p>Max 50 clients</p>
           <p>Max 50 leads</p>
-
-          <button @click="subscribe('bigteam')" class="button is-primary">
-            Subscribe
-          </button>
+          <hr />
+          <template v-if="$store.state.team.plan === 'Big team'">
+            <button class="button is-info is-rounded is-medium" disabled>
+              Subscribed
+            </button>
+            <button
+              class="button is-medium is-rounded is-light is-danger"
+              @click="cancelPlan"
+            >
+              Cancel
+            </button>
+          </template>
+          <template v-else>
+            <button
+              @click="subscribe('bigteam')"
+              class="button is-success is-rounded is-medium is-outlined"
+            >
+              Subscribe
+            </button>
+          </template>
         </div>
-      </div>
+      </div> -->
 
       <hr />
 
-      <div class="column is-12">
+      <!-- <div class="column is-12">
         <button @click="cancelPlan()" class="button is-danger">
           Cancel plan
         </button>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
 
 <script>
 import { toast } from "bulma-toast"
+import BigTeamPlan from '@/components/dashboard/BigTeamPlan.vue'
+import FreePlan from '@/components/dashboard/FreePlan.vue'
+import SmallTeamPlan from '@/components/dashboard/SmallTeamPlan.vue'
+
 import axios from "axios"
 export default {
   name: "Plans",
+  components: {
+    BigTeamPlan,
+    FreePlan,
+    SmallTeamPlan
+  },
   data() {
     return {
       pub_key: "",
       stripe: null,
+      team: {
+        plan: {},
+      },
     }
   },
   async mounted() {
@@ -94,7 +150,6 @@ export default {
     async cancelPlan() {
       this.$store.commit("setIsLoading", true)
       axios.post("/api/v1/teams/cancel_plan/").then((response) => {
-
         this.$store.commit("setTeam", {
           id: response.data.id,
           name: response.data.name,

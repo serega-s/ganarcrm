@@ -8,12 +8,12 @@
 
       <div class="column is-12">
         <div class="buttons">
+          <button @click="logout()" class="button is-danger">Logout</button>
           <router-link
             :to="{ name: 'EditMember', params: { id: $store.state.user.id } }"
-            class="button is-light"
+            class="mx-5"
             >Edit</router-link
           >
-          <button @click="logout()" class="button is-danger">Logout</button>
         </div>
       </div>
     </div>
@@ -22,22 +22,26 @@
 
 <script>
 import axios from "axios"
+import AuthService from "../../services/auth.service"
 
 export default {
   name: "MyAccount",
-  mounted(){
+  mounted() {
     document.title = "GanarCRM: Team"
   },
   methods: {
     logout() {
-      this.$store.dispatch("logout").then(
-        () => {
-          this.$router.push({ name: "LogIn" })
-        },
-        (error) => {
-          console.log(error.response)
-        }
-      )
+      AuthService.logout()
+      this.$store.commit("removeToken")
+      this.$router.push({ name: "LogIn" })
+      //   this.$store.dispatch("logout").then(
+      //     () => {
+      //       this.$router.push({ name: "LogIn" })
+      //     },
+      //     (error) => {
+      //       console.log(error.response)
+      //     }
+      //   )
     },
   },
 }

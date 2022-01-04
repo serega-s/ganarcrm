@@ -1,12 +1,24 @@
 <template>
-  <nav class="navbar is-dark">
+  <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
       <router-link to="/dashboard/team" class="navbar-item">
         <strong>Ganar CRM</strong>
       </router-link>
+
+      <a
+        role="button"
+        class="navbar-burger"
+        aria-label="menu"
+        aria-expanded="false"
+        data-target="navbar-menu"
+      >
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
     </div>
 
-    <div class="navbar-menu">
+    <div class="navbar-menu" id="navbar-menu">
       <div class="navbar-end">
         <template v-if="$store.state.user.isAuthenticated">
           <router-link :to="{ name: 'Leads' }" class="navbar-item"
@@ -25,7 +37,7 @@
               <router-link to="/sign-up" class="button is-success">
                 <strong>Sign Up</strong>
               </router-link>
-              <router-link to="/log-in" class="button is-light">
+              <router-link to="/log-in" class="button is-light is-outlined">
                 Log In
               </router-link>
             </template>

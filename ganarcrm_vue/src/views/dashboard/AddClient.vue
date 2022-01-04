@@ -1,10 +1,10 @@
 <template>
   <div class="container">
     <div class="columns is-multiline">
-      <div class="columns is-12">
+      <div class="column is-12">
         <h1 class="title">Add client</h1>
       </div>
-      <div class="column is-12">
+      <div class="column is-half is-offset-one-quarter">
         <form @submit.prevent="submitForm">
           <div class="field">
             <label for="name">Name</label>
@@ -15,6 +15,7 @@
                 class="input"
                 v-model="name"
                 placeholder="Client Name"
+                required
               />
             </div>
           </div>
@@ -28,6 +29,7 @@
                 class="input"
                 v-model="contact_person"
                 placeholder="Contact Person"
+                required
               />
             </div>
           </div>
@@ -41,6 +43,7 @@
                 class="input"
                 v-model="email"
                 placeholder="Email"
+                required
               />
             </div>
           </div>
@@ -54,6 +57,7 @@
                 class="input"
                 v-model="phone"
                 placeholder="Email"
+                required
               />
             </div>
           </div>
@@ -73,7 +77,7 @@
 
           <div class="field">
             <div class="control">
-              <button class="button is-success">Submit</button>
+              <button class="button is-success is-outlined">Submit</button>
             </div>
           </div>
         </form>

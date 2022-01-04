@@ -8,20 +8,24 @@
     >
       <div class="lds-dual-ring"></div>
     </div>
-
     <section class="section">
       <router-view />
     </section>
+
+    <Footer />
   </div>
 </template>
 
 <script>
 import Navbar from "@/components/layout/Navbar"
+import Footer from "@/components/layout/Footer"
 import axios from "axios"
+import EventBus from "./common/EventBus"
 export default {
   name: "App",
   components: {
     Navbar,
+    Footer,
   },
   beforeCreate() {
     this.$store.commit("initializeStore")
@@ -37,6 +41,21 @@ export default {
       this.$router.push("/dashboard/add-team")
     }
   },
+  // methods: {
+  //   logout() {
+  //     AuthService.logout()
+  //     this.$store.commit("removeToken")
+  //     this.$router.push({ name: "LogIn" })
+  //   },
+  // },
+  // mounted() {
+  //   EventBus.on("logout", () => {
+  //     this.logout()
+  //   })
+  // },
+  // beforeUnmount() {
+  //   EventBus.remove("logout")
+  // },
 }
 </script>
 

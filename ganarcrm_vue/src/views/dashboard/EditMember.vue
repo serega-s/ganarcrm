@@ -1,10 +1,10 @@
 <template>
   <div class="container">
     <div class="columns is-multiline">
-      <div class="columns is-12">
+      <div class="column is-12">
         <h1 class="title">Edit member</h1>
       </div>
-      <div class="column is-12">
+      <div class="column is-half is-offset-one-quarter">
         <form @submit.prevent="submitForm">
           <div class="field">
             <label for="name">First name</label>
@@ -34,7 +34,7 @@
 
           <div class="field">
             <div class="control">
-              <button class="button is-success">Submit</button>
+              <button class="button is-success is-outlined">Submit</button>
             </div>
           </div>
         </form>
@@ -46,6 +46,7 @@
 <script>
 import axios from "axios"
 import { toast } from "bulma-toast"
+import UserService from "../../services/user.service"
 export default {
   name: "EditMember",
   data() {
@@ -63,8 +64,7 @@ export default {
 
       const userID = this.$route.params.id
 
-      await axios
-        .put(`/api/v1/teams/member/${userID}/`, this.user)
+      await UserService.editMember(userID, this.user)
         .then((response) => {
           toast({
             message: "The user was updated",
@@ -85,8 +85,7 @@ export default {
     async getUser() {
       this.$store.commit("setIsLoading", true)
       const userID = this.$route.params.id
-      await axios
-        .get(`/api/v1/teams/member/${userID}/`)
+      UserService.getUser(userID)
         .then((response) => {
           this.user = response.data
         })

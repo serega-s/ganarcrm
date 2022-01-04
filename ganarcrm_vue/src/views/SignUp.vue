@@ -60,7 +60,7 @@
 
           <div class="field">
             <div class="control">
-              <button class="button is-success">Submit</button>
+              <button class="button is-success is-outlined">Submit</button>
             </div>
           </div>
         </form>
@@ -85,16 +85,19 @@ export default {
   },
   methods: {
     async submitForm() {
+      this.$store.commit("setIsLoading", true)
       this.errors = []
 
       if (!this.username) {
         this.errors.push("Username field is missing!")
+        this.$store.commit("setIsLoading", false)
       } else if (!this.password1 || this.password1.length < 8) {
         this.errors.push("Password must contain at least 8 characters")
+        this.$store.commit("setIsLoading", false)
       } else if (this.password1 !== this.password2) {
         this.errors.push("Passwords don't match!")
+        this.$store.commit("setIsLoading", false)
       } else if (!this.errors.length) {
-        this.$store.commit("setIsLoading", true)
         const formData = {
           username: this.username,
           password: this.password1,
