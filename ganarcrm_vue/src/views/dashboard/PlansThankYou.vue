@@ -19,15 +19,22 @@
 <script>
 import axios from "axios"
 import { toast } from "bulma-toast"
+import StripeService from "../../services/stripe.service"
+
 export default {
   name: "PlansThankYou",
   mounted() {
     document.title = "GanarCRM: Thank You"
-    axios
-      .post("/api/v1/stripe/check_session/", {
-        sessionId: this.$route.params.session_id,
-      })
+    StripeService.checkSession(this.$route.params.session_id)
       .then((response) => {
+        this.$store.commit("setTeam", {
+          id: response.data.id,
+          name: response.data.name,
+          plan: response.data.plan.name,
+          max_leads: response.data.plan.max_leads,
+          max_clients: response.data.plan.max_clients,
+        })
+
         toast({
           message: "The plan was updated",
           type: "is-success",
@@ -35,14 +42,6 @@ export default {
           pauseOnHover: true,
           duration: 200,
           position: "bottom-right",
-        })
-
-        this.$store.commit("setTeam", {
-          id: response.data.id,
-          name: response.data.name,
-          plan: response.data.plan.name,
-          max_leads: response.data.plan.max_leads,
-          max_clients: response.data.plan.max_clients,
         })
       })
       .catch((error) => {
@@ -54,7 +53,6 @@ export default {
           duration: 200,
           position: "bottom-right",
         })
-        console.log("Error:", error.response)
       })
   },
 }

@@ -4,10 +4,8 @@
       <div class="column is-12">
         <h1 class="title">Plans</h1>
       </div>
-      <FreePlan :cancelPlan="cancelPlan" />
-      <SmallTeamPlan :cancelPlan="cancelPlan" :subsribe="subscribe('smallteam')" />
-      <BigTeamPlan :cancelPlan="cancelPlan" :subsribe="subscribe('bigteam')" />
-      <!-- <div class="column is-4 has-text-centered">
+
+      <div class="column is-4 has-text-centered">
         <div class="box">
           <h2 class="subtitle">Free</h2>
           <h4 class="is-size-4">$0</h4>
@@ -89,33 +87,21 @@
             </button>
           </template>
         </div>
-      </div> -->
+      </div>
 
       <hr />
-
-      <!-- <div class="column is-12">
-        <button @click="cancelPlan()" class="button is-danger">
-          Cancel plan
-        </button>
-      </div> -->
     </div>
   </div>
 </template>
 
 <script>
 import { toast } from "bulma-toast"
-import BigTeamPlan from '@/components/dashboard/BigTeamPlan.vue'
-import FreePlan from '@/components/dashboard/FreePlan.vue'
-import SmallTeamPlan from '@/components/dashboard/SmallTeamPlan.vue'
 
-import axios from "axios"
+import StripeService from "../../services/stripe.service"
+import TeamService from "../../services/team.service"
+
 export default {
   name: "Plans",
-  components: {
-    BigTeamPlan,
-    FreePlan,
-    SmallTeamPlan
-  },
   data() {
     return {
       pub_key: "",
@@ -134,22 +120,16 @@ export default {
     async getPubKey() {
       this.$store.commit("setIsLoading", true)
 
-      await axios
-        .get("/api/v1/stripe/get_stipe_pub_key/")
-        .then((response) => {
-          console.log(response.data)
-
-          this.pub_key = response.data.pub_key
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+      await StripeService.getStripePubKey().then((response) => {
+        this.pub_key = response.data.pub_key
+      })
 
       this.$store.commit("setIsLoading", false)
     },
     async cancelPlan() {
       this.$store.commit("setIsLoading", true)
-      axios.post("/api/v1/teams/cancel_plan/").then((response) => {
+      await TeamService.cancelPlan().then((response) => {
+
         this.$store.commit("setTeam", {
           id: response.data.id,
           name: response.data.name,
@@ -176,16 +156,11 @@ export default {
         plan: plan,
       }
 
-      await axios
-        .post("/api/v1/stripe/create_checkout_session/", data)
-        .then((response) => {
-          return this.stripe.redirectToCheckout({
-            sessionId: response.data.sessionId,
-          })
+      await StripeService.createCheckoutSession(data).then((response) => {
+        return this.stripe.redirectToCheckout({
+          sessionId: response.data.sessionId,
         })
-        .catch((error) => {
-          console.log("Error:", error.response)
-        })
+      })
 
       this.$store.commit("setIsLoading", false)
     },

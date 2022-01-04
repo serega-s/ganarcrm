@@ -35,6 +35,8 @@
 <script>
 import axios from "axios"
 import { toast } from "bulma-toast"
+import TeamService from '../../services/team.service'
+
 export default {
   name: "AddTeam",
   data() {
@@ -53,10 +55,8 @@ export default {
         name: this.name,
       }
 
-      await axios
-        .post("/api/v1/teams/", team)
+      await TeamService.addTeam(team)
         .then((response) => {
-          console.log("addTeam", response)
 
           this.$store.commit("setTeam", {
             id: response.data.id,
@@ -76,9 +76,6 @@ export default {
           })
 
           this.$router.push("/dashboard/team")
-        })
-        .catch((error) => {
-          console.log(error)
         })
       this.$store.commit("setIsLoading", false)
     },

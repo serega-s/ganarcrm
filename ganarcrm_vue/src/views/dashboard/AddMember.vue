@@ -67,6 +67,9 @@
 <script>
 import axios from "axios"
 import { toast } from "bulma-toast"
+import AuthService from "../../services/auth.service"
+import UserService from "../../services/user.service"
+
 export default {
   name: "AddMember",
   data() {
@@ -82,15 +85,19 @@ export default {
   },
   methods: {
     async submitForm() {
+      this.$store.commit("setIsLoading", true)
       this.errors = []
 
       if (this.username === "") {
+        this.$store.commit("setIsLoading", false)
         this.errors.push("The username is missing!")
       }
       if (this.password1 === "") {
+        this.$store.commit("setIsLoading", false)
         this.errors.push("The password is too short!")
       }
       if (this.password1 !== this.password2) {
+        this.$store.commit("setIsLoading", false)
         this.errors.push("The passwords are not matching!")
       }
 
@@ -101,34 +108,23 @@ export default {
           password: this.password1,
         }
 
-        await axios
-          .post("/api/v1/users/", formData)
-          .then((response) => {
-            toast({
-              message: "The member was added!",
-              type: "is-success",
-              dismissible: true,
-              pauseOnHover: true,
-              duration: 2000,
-              position: "bottom-right",
-            })
-          })
-          .catch((error) => {
-            console.log(error)
-          })
+        await AuthService.register(formData).then((response) => response)
 
         const emailData = {
           email: this.username,
         }
 
-        await axios
-          .post("/api/v1/teams/add_member/", emailData)
-          .then((response) => {
-            this.$router.push({ name: "Team" })
+        await UserService.addMember(emailData).then((response) => {
+          toast({
+            message: "The member was added!",
+            type: "is-success",
+            dismissible: true,
+            pauseOnHover: true,
+            duration: 2000,
+            position: "bottom-right",
           })
-          .catch((error) => {
-            console.log(error)
-          })
+          this.$router.push({ name: "Team" })
+        })
 
         this.$store.commit("setIsLoading", false)
       }

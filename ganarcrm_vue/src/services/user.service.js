@@ -7,6 +7,11 @@ class UserService {
 
     return response
   }
+  addMember(data) {
+    const response = axios.post("/api/v1/teams/add_member/", data)
+
+    return response
+  }
   editMember(userID, user) {
     const response = axios.put(`/api/v1/teams/member/${userID}/`, user)
 

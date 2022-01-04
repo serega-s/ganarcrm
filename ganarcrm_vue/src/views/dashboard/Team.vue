@@ -50,6 +50,8 @@
 
 <script>
 import axios from "axios"
+import TeamService from '../../services/team.service'
+
 export default {
   name: "Team",
   data() {
@@ -67,14 +69,9 @@ export default {
   methods: {
     async getTeam() {
       this.$store.commit("setIsLoading", true)
-      await axios
-        .get("/api/v1/teams/get_my_team/")
+      await TeamService.getMyTeam()
         .then((response) => {
-          console.log('getMyTeam', response)
           this.team = response.data
-        })
-        .catch((error) => {
-          console.log(error.response)
         })
       this.$store.commit("setIsLoading", false)
     },
