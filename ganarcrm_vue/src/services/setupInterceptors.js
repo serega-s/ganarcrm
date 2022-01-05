@@ -1,12 +1,14 @@
 import axios from "axios"
+import store from "../store"
 import TokenService from "./token.service"
 
 const setup = (store) => {
   axios.interceptors.request.use(
     (config) => {
-      const token = TokenService.getLocalAccessToken()
-      if (token) {
-        config.headers["Authorization"] = "Bearer " + token
+      const accessToken = TokenService.getLocalAccessToken()
+      if (accessToken) {
+        config.headers["Authorization"] = "Bearer " + accessToken // for Spring Boot back-end
+        // config.headers["x-access-token"] = token // for Node.js Express back-end
       }
       return config
     },

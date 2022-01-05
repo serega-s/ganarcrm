@@ -19,7 +19,7 @@
 <script>
 import Navbar from "@/components/layout/Navbar"
 import Footer from "@/components/layout/Footer"
-import PWAPrompt from './components/pwa/PWAPrompt'
+import PWAPrompt from "./components/pwa/PWAPrompt"
 import axios from "axios"
 import EventBus from "./common/EventBus"
 export default {
@@ -27,7 +27,7 @@ export default {
   components: {
     Navbar,
     Footer,
-    PWAPrompt
+    PWAPrompt,
   },
   beforeCreate() {
     this.$store.commit("initializeStore")
@@ -44,20 +44,20 @@ export default {
     // }
   },
   // methods: {
-  //   logout() {
+  //   logOut() {
   //     AuthService.logout()
   //     this.$store.commit("removeToken")
   //     this.$router.push({ name: "LogIn" })
   //   },
   // },
-  // mounted() {
-  //   EventBus.on("logout", () => {
-  //     this.logout()
-  //   })
-  // },
-  // beforeUnmount() {
-  //   EventBus.remove("logout")
-  // },
+  mounted() {
+    EventBus.on("logout", () => {
+      this.logOut()
+    })
+  },
+  beforeUnmount() {
+    EventBus.remove("logout")
+  },
 }
 </script>
 

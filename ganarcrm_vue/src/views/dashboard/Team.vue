@@ -28,7 +28,9 @@
         <hr />
 
         <template v-if="team.created_by.id === parseInt($store.state.user.id)">
-          <router-link :to="{ name: 'AddMember' }" class="button is-primary is-light is-outlined"
+          <router-link
+            :to="{ name: 'AddMember' }"
+            class="button is-primary is-light is-outlined"
             >Add Member</router-link
           >
         </template>
@@ -57,13 +59,13 @@
 </template>
 
 <script>
-import Breadcrumb from '../../components/dashboard/Breadcrumb.vue'
-import TeamService from '../../services/team.service'
+import Breadcrumb from "../../components/dashboard/Breadcrumb.vue"
+import TeamService from "../../services/team.service"
 
 export default {
   name: "Team",
   components: {
-    Breadcrumb
+    Breadcrumb,
   },
   data() {
     return {
@@ -80,10 +82,9 @@ export default {
   methods: {
     async getTeam() {
       this.$store.commit("setIsLoading", true)
-      await TeamService.getMyTeam()
-        .then((response) => {
-          this.team = response.data
-        })
+      await TeamService.getMyTeam().then((response) => {
+        this.team = response.data
+      })
       this.$store.commit("setIsLoading", false)
     },
   },

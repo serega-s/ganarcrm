@@ -103,12 +103,8 @@ export default {
 
       await ClientService.deleteClient(clientID)
         .then((response) => {
-          console.log(response.data)
 
           this.$router.push({ name: "Clients" })
-        })
-        .catch((error) => {
-          console.log(error)
         })
 
       this.$store.commit("setIsLoading", false)

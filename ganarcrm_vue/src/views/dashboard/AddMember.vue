@@ -8,7 +8,7 @@
           </li>
           <li><router-link :to="{ name: 'Team' }">Team</router-link></li>
           <li class="is-active">
-            <router-link :to="{ name: 'Add Member' }">Add Member</router-link>
+            <router-link :to="{ name: 'AddMember' }">Add Member</router-link>
           </li>
         </Breadcrumb>
         <h1 class="title">Add member</h1>
@@ -101,11 +101,11 @@ export default {
       this.$store.commit("setIsLoading", true)
       this.errors = []
 
-      if (this.email === "") {
+      if (!this.email) {
         this.$store.commit("setIsLoading", false)
-        this.errors.push("The username is missing!")
+        this.errors.push("The email is missing!")
       }
-      if (this.password1 === "") {
+      if (!this.password1) {
         this.$store.commit("setIsLoading", false)
         this.errors.push("The password is too short!")
       }
@@ -121,23 +121,27 @@ export default {
           password: this.password1,
         }
 
-        await AuthService.register(formData).then((response) => response)
+        await AuthService.register(formData)
+          .then((response) => {
+            const emailData = {
+              email: this.email,
+            }
 
-        const emailData = {
-          email: this.email,
-        }
-
-        await UserService.addMember(emailData).then((response) => {
-          toast({
-            message: "The member was added!",
-            type: "is-success",
-            dismissible: true,
-            pauseOnHover: true,
-            duration: 2000,
-            position: "bottom-right",
+            UserService.addMember(emailData).then((response) => {
+              toast({
+                message: "The member was added!",
+                type: "is-success",
+                dismissible: true,
+                pauseOnHover: true,
+                duration: 2000,
+                position: "bottom-right",
+              })
+              this.$router.push({ name: "Team" })
+            })
           })
-          this.$router.push({ name: "Team" })
-        })
+          .catch((error) => {
+            this.errors.push(error.response.data)
+          })
 
         this.$store.commit("setIsLoading", false)
       }

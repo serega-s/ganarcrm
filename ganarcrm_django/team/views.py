@@ -1,3 +1,12 @@
+from .serializers import TeamSerializer, UserSerializer
+from .models import Plan, Team
+from stripe.api_resources import line_item, payment_method
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from rest_framework import status, viewsets
+from django.views.decorators.csrf import csrf_exempt
+from django.http.response import Http404, HttpResponse
 import json
 from datetime import datetime
 
@@ -5,18 +14,8 @@ import stripe
 from django.conf import settings
 # from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
+
 User = get_user_model()
-
-from django.http.response import Http404, HttpResponse
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework import status, viewsets
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from stripe.api_resources import line_item, payment_method
-
-from .models import Plan, Team
-from .serializers import TeamSerializer, UserSerializer
 
 
 class TeamViewSet(viewsets.ModelViewSet):
@@ -75,8 +74,6 @@ def upgrade_plan(request):
     team = Team.objects.filter(members__in=[request.user]).first()
     plan = request.data['plan']
 
-    print('Plan', plan)
-
     if plan == 'free':
         plan = Plan.objects.get(name='Free')
     elif plan == 'smallteam':
@@ -97,12 +94,12 @@ def add_member(request):
     team = Team.objects.filter(members__in=[request.user]).first()
     email = request.data['email']
 
-    user = User.objects.get(username=email)
+    user = User.objects.get(email=email)
 
     team.members.add(user)
     team.save()
 
-    return Response()
+    return Response({'data': 'Member was added'})
 
 
 @api_view(['POST'])
@@ -140,7 +137,6 @@ def cancel_plan(request):
 
     try:
         stripe.api_key = settings.STRIPE_SECRET_KEY
-        print(team.stripe_subscription_id)
         stripe.Subscription.delete(team.stripe_subscription_id)
     except Exception:
         return Response({'error': 'Something went wrong. Please try again'})
@@ -185,7 +181,6 @@ def create_checkout_session_and_upgrade_plan(request):
             price_id = settings.STRIPE_PRICE_ID_BIG_TEAM
             checkout_session = create_checkout_session(team, price_id)
 
-        print('PLAN:', plan)
         team.plan = plan
         team.save()
         serializer = TeamSerializer(team)
@@ -202,8 +197,6 @@ def stripe_webhook(request):
     payload = request.body
     sig_header = request.META['HTTP_STRIPE_SIGNATURE']
     event = None
-
-    print('payload', payload)
 
     try:
         event = stripe.Webhook.construct_event(
