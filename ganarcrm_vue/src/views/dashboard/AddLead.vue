@@ -37,14 +37,28 @@
           <div class="field">
             <label for="email">Email</label>
             <div class="control">
-              <input type="email" name="email" class="input" v-model="email" placeholder="Email" required />
+              <input
+                type="email"
+                name="email"
+                class="input"
+                v-model="email"
+                placeholder="Email"
+                required
+              />
             </div>
           </div>
 
           <div class="field">
             <label for="phone">Phone</label>
             <div class="control">
-              <input type="number" name="phone" class="input" v-model="phone" placeholder="Phone" required />
+              <input
+                type="number"
+                name="phone"
+                class="input"
+                v-model="phone"
+                placeholder="Phone"
+                required
+              />
             </div>
           </div>
 
@@ -57,7 +71,6 @@
                 class="input"
                 v-model="website"
                 placeholder="Website"
-                
               />
             </div>
           </div>
@@ -130,6 +143,7 @@
 <script>
 import axios from "axios"
 import { toast } from "bulma-toast"
+import LeadService from "../../services/lead.service"
 export default {
   name: "AddLead",
   data() {
@@ -164,8 +178,7 @@ export default {
         priority: this.priority,
       }
 
-      await axios
-        .post("/api/v1/leads/", lead)
+      await LeadService.addLead(lead)
         .then((response) => {
           toast({
             message: "The lead was created",
@@ -175,10 +188,7 @@ export default {
             duration: 2000,
             position: "bottom-right",
           })
-          this.$router.push("/dashboard/leads")
-        })
-        .catch((error) => {
-          console.log(error.response)
+          this.$router.push({ name: "Leads" })
         })
 
       this.$store.commit("setIsLoading", false)

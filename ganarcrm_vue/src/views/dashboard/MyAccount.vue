@@ -3,7 +3,7 @@
     <div class="columns is-multiline">
       <div class="column is-12">
         <h1 class="title">My Account</h1>
-        {{ $store.state.user.username }}
+        {{ $store.state.user.email }}
       </div>
 
       <div class="column is-12">
@@ -21,7 +21,6 @@
 </template>
 
 <script>
-import axios from "axios"
 import AuthService from "../../services/auth.service"
 
 export default {
@@ -31,6 +30,7 @@ export default {
   },
   methods: {
     logout() {
+      this.$store.commit("setIsLoading", true)
       AuthService.logout()
       this.$store.commit("removeToken")
       this.$router.push({ name: "LogIn" })
@@ -42,6 +42,8 @@ export default {
       //       console.log(error.response)
       //     }
       //   )
+
+      this.$store.commit("setIsLoading", false)
     },
   },
 }

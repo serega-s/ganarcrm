@@ -3,7 +3,7 @@ import axios from "axios"
 class AuthService {
   login(user) {
     const response = axios.post("/api/v1/token/", {
-      username: user.username,
+      email: user.email,
       password: user.password,
     })
     // const { access, refresh } = response.data

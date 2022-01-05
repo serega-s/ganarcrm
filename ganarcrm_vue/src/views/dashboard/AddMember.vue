@@ -15,7 +15,7 @@
                 name="email"
                 class="input"
                 placeholder="Email"
-                v-model="username"
+                v-model="email"
                 required
               />
             </div>
@@ -74,7 +74,7 @@ export default {
   name: "AddMember",
   data() {
     return {
-      username: "",
+      email: "",
       password1: "",
       password2: "",
       errors: [],
@@ -88,7 +88,7 @@ export default {
       this.$store.commit("setIsLoading", true)
       this.errors = []
 
-      if (this.username === "") {
+      if (this.email === "") {
         this.$store.commit("setIsLoading", false)
         this.errors.push("The username is missing!")
       }
@@ -104,14 +104,14 @@ export default {
       if (!this.errors.length) {
         this.$store.commit("setIsLoading", true)
         const formData = {
-          username: this.username,
+          email: this.email,
           password: this.password1,
         }
 
         await AuthService.register(formData).then((response) => response)
 
         const emailData = {
-          email: this.username,
+          email: this.email,
         }
 
         await UserService.addMember(emailData).then((response) => {

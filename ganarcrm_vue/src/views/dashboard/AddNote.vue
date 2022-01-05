@@ -9,14 +9,26 @@
           <div class="field">
             <label for="name">Name</label>
             <div class="control">
-              <input type="text" name="name" class="input" v-model="name" />
+              <input
+                type="text"
+                name="name"
+                class="input"
+                v-model="name"
+                required
+                placeholder="Name"
+              />
             </div>
           </div>
 
           <div class="field">
             <label for="body">Body</label>
             <div class="control">
-              <textarea class="textarea" v-model="body" />
+              <textarea
+                class="textarea"
+                v-model="body"
+                required
+                placeholder="Body"
+              />
             </div>
           </div>
 
@@ -57,21 +69,20 @@ export default {
         client_id: this.client_id,
       }
 
-      await NoteService.addNote(note)
-        .then((response) => {
-          toast({
-            message: "The note was added",
-            type: "is-success",
-            dismissible: true,
-            pauseOnHover: true,
-            duration: 2000,
-            position: "bottom-right",
-          })
-          this.$router.push({
-            name: "Client",
-            params: { id: this.$route.params.id },
-          })
+      await NoteService.addNote(note).then((response) => {
+        toast({
+          message: "The note was added",
+          type: "is-success",
+          dismissible: true,
+          pauseOnHover: true,
+          duration: 2000,
+          position: "bottom-right",
         })
+        this.$router.push({
+          name: "Client",
+          params: { id: this.$route.params.id },
+        })
+      })
 
       this.$store.commit("setIsLoading", false)
     },

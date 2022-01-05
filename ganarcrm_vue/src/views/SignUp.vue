@@ -12,7 +12,7 @@
                 type="email"
                 name="email"
                 class="input"
-                v-model="username"
+                v-model="email"
                 placeholder="Email"
               />
             </div>
@@ -77,7 +77,7 @@ export default {
   name: "SignUp",
   data() {
     return {
-      username: "",
+      email: "",
       password1: "",
       password2: "",
       errors: [],
@@ -88,7 +88,7 @@ export default {
       this.$store.commit("setIsLoading", true)
       this.errors = []
 
-      if (!this.username) {
+      if (!this.email) {
         this.errors.push("Username field is missing!")
         this.$store.commit("setIsLoading", false)
       } else if (!this.password1 || this.password1.length < 8) {
@@ -99,7 +99,7 @@ export default {
         this.$store.commit("setIsLoading", false)
       } else if (!this.errors.length) {
         const formData = {
-          username: this.username,
+          email: this.email,
           password: this.password1,
         }
 

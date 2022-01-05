@@ -3,7 +3,10 @@ from datetime import datetime
 
 import stripe
 from django.conf import settings
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
 from django.http.response import Http404, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status, viewsets

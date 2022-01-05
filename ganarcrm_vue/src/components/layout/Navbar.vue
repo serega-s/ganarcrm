@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
-      <router-link to="/dashboard/team" class="navbar-item">
+      <router-link :to="{ name: 'Home' }" class="navbar-item">
         <strong>Ganar CRM</strong>
       </router-link>
 
@@ -27,7 +27,7 @@
           <router-link :to="{ name: 'Clients' }" class="navbar-item"
             >Clients</router-link
           >
-          <router-link to="/dashboard/team" class="navbar-item"
+          <router-link :to="{ name: 'Team' }" class="navbar-item"
             >Team</router-link
           >
         </template>

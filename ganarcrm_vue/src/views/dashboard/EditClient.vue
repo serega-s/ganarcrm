@@ -84,6 +84,7 @@
 <script>
 import axios from "axios"
 import { toast } from "bulma-toast"
+import ClientService from "../../services/client.service"
 export default {
   name: "AddClient",
   data() {
@@ -101,13 +102,9 @@ export default {
 
       const clientID = this.$route.params.id
 
-      axios
-        .get(`/api/v1/clients/${clientID}/`)
+      await ClientService.getClient(clientID)
         .then((response) => {
           this.client = response.data
-        })
-        .catch((error) => {
-          console.log(error)
         })
 
       this.$store.commit("setIsLoading", false)
@@ -117,8 +114,7 @@ export default {
 
       const clientID = this.$route.params.id
 
-      axios
-        .patch(`/api/v1/clients/${clientID}/`, this.client)
+      await ClientService.editClient(clientID, this.client)
         .then((response) => {
           toast({
             message: "The client was updated",
@@ -130,9 +126,6 @@ export default {
           })
 
           this.$router.push({ name: "Clients" })
-        })
-        .catch((error) => {
-          console.log(error)
         })
 
       this.$store.commit("setIsLoading", false)

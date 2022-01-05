@@ -7,6 +7,12 @@ class NoteService {
     return response
   }
 
+  getClientNotes(clientID) {
+    const response = axios.get(`/api/v1/notes/?client_id=${clientID}`)
+
+    return response
+  }
+
   getNote(noteID, clientID) {
     const response = axios.get(`/api/v1/notes/${noteID}/?client_id=${clientID}`)
 

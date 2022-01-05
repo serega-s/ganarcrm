@@ -56,7 +56,7 @@
                 name="phone"
                 class="input"
                 v-model="phone"
-                placeholder="Email"
+                placeholder="Phone"
                 required
               />
             </div>
@@ -89,6 +89,7 @@
 <script>
 import axios from "axios"
 import { toast } from "bulma-toast"
+import ClientService from '../../services/client.service'
 export default {
   name: "AddClient",
   data() {
@@ -115,8 +116,7 @@ export default {
         website: this.website,
       }
 
-      await axios
-        .post("/api/v1/clients/", client)
+      await ClientService.addClient(client)
         .then((response) => {
           toast({
             message: "The client was created",
@@ -127,9 +127,6 @@ export default {
             position: "bottom-right",
           })
           this.$router.push({ name: "Clients" })
-        })
-        .catch((error) => {
-          console.log(error.response)
         })
 
       this.$store.commit("setIsLoading", false)

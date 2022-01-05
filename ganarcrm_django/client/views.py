@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django.http.response import Http404
 from lead.models import Lead
 from rest_framework import filters, status, viewsets

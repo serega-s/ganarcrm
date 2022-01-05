@@ -32,13 +32,13 @@
         <table class="table is-fullwidth">
           <thead>
             <tr>
-              <th>Username</th>
+              <th>Email</th>
               <th>Full name</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="member in team.members" :key="member.id">
-              <td>{{ member.username }}</td>
+              <td>{{ member.email }}</td>
               <td>{{ member.first_name }} {{ member.last_name }}</td>
             </tr>
           </tbody>
@@ -49,7 +49,6 @@
 </template>
 
 <script>
-import axios from "axios"
 import TeamService from '../../services/team.service'
 
 export default {

@@ -44,22 +44,14 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        # 'rest_framework.authentication.TokenAuthentication',
+    'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
-    ),
+    ],
+    'DATETIME_FORMAT': "%d/%m/%Y %H:%M",
 }
-
-# SIMPLE_JWT = {
-#     "AUTH_HEADER_TYPES": ("JWT",),
-#     # "ACCESS_TOKEN_LIFETIME": timedelta(minutes=1),
-#     "ACCESS_TOKEN_LIFETIME": timedelta(days=2),
-#     "REFRESH_TOKEN_LIFETIME": timedelta(days=4),
-#     "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
-# }
 
 # Application definition
 
@@ -79,7 +71,8 @@ INSTALLED_APPS = [
 
     'lead.apps.LeadConfig',
     'team.apps.TeamConfig',
-    'client.apps.ClientConfig'
+    'client.apps.ClientConfig',
+    'user.apps.UserConfig'
 ]
 
 MIDDLEWARE = [
@@ -139,6 +132,8 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
 
+
+AUTH_USER_MODEL = 'user.User'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases

@@ -18,7 +18,12 @@
         <form @submit.prevent="getClients">
           <div class="field has-addons">
             <div class="control">
-              <input type="text" class="input" v-model="query" placeholder="Client Name" />
+              <input
+                type="text"
+                class="input"
+                v-model="query"
+                placeholder="Client Name"
+              />
             </div>
             <div class="control">
               <button class="button is-success">Search</button>
@@ -79,6 +84,7 @@
 
 <script>
 import axios from "axios"
+import ClientService from "../../services/client.service"
 export default {
   name: "Clients",
   data() {
@@ -110,16 +116,14 @@ export default {
       this.showNextButton = false
       this.showPreviousButton = false
 
-      await axios
-        .get(`/api/v1/clients/`)
+      await ClientService.getClients()
         .then((response) => {
           this.num_clients = response.data.count
         })
         .catch((error) => {
           console.log(error)
         })
-      await axios
-        .get(`/api/v1/clients/?page=${this.currentPage}&search=${this.query}`)
+      await ClientService.paginateClients(this.currentPage, this.query)
         .then((response) => {
           this.clients = response.data.results
 
@@ -129,9 +133,6 @@ export default {
           if (response.data.previous) {
             this.showPreviousButton = true
           }
-        })
-        .catch((error) => {
-          console.log(error)
         })
 
       this.$store.commit("setIsLoading", false)

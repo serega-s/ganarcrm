@@ -9,7 +9,7 @@ export default createStore({
       id: 0,
       token: "",
       isAuthenticated: false,
-      username: "",
+      email: "",
       accessToken: "",
       refreshToken: "",
     },
@@ -37,7 +37,7 @@ export default createStore({
         state.user.accessToken = localStorage.getItem("accessToken")
         state.user.refreshToken = localStorage.getItem("refreshToken")
         state.user.isAuthenticated = true
-        state.user.username = localStorage.getItem("username")
+        state.user.email = localStorage.getItem("email")
         state.user.id = localStorage.getItem("userid")
         state.team.name = localStorage.getItem("team_name")
         state.team.id = localStorage.getItem("team_id")
@@ -50,7 +50,7 @@ export default createStore({
         state.user.refreshToken = ""
         state.user.isAuthenticated = false
         state.user.id = 0
-        state.user.username = ""
+        state.user.email = ""
         state.team.name = ""
         state.team.id = 0
         state.team.plan = ""

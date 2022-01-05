@@ -98,7 +98,7 @@
                     v-for="member in team.members"
                     :key="member.id"
                     :value="member"
-                    >{{ member.username }}</option
+                    >{{ member.email }}</option
                   >
                 </select>
               </div>
@@ -118,8 +118,10 @@
 
 <script>
 import axios from "axios"
-
 import { toast } from "bulma-toast"
+
+import LeadService from "../../services/lead.service"
+import TeamService from "../../services/team.service"
 
 export default {
   name: "EditLead",
@@ -142,14 +144,9 @@ export default {
 
       const leadID = this.$route.params.id
 
-      axios
-        .get(`/api/v1/leads/${leadID}/`)
-        .then((response) => {
-          this.lead = response.data
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+      await LeadService.getLead(leadID).then((response) => {
+        this.lead = response.data
+      })
 
       this.$store.commit("setIsLoading", false)
     },
@@ -158,37 +155,27 @@ export default {
 
       const leadID = this.$route.params.id
 
-      axios
-        .patch(`/api/v1/leads/${leadID}/`, this.lead)
-        .then((response) => {
-          toast({
-            message: "The lead was updated",
-            type: "is-success",
-            dismissible: true,
-            pauseOnHover: true,
-            duration: 2000,
-            position: "bottom-right",
-          })
+      await LeadService.editLead(leadID, this.lead).then((response) => {
+        toast({
+          message: "The lead was updated",
+          type: "is-success",
+          dismissible: true,
+          pauseOnHover: true,
+          duration: 2000,
+          position: "bottom-right",
+        })
 
-          this.$router.push(`/dashboard/leads/${leadID}`)
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+        this.$router.push(`/dashboard/leads/${leadID}`)
+      })
 
       this.$store.commit("setIsLoading", false)
     },
     async getTeam() {
       this.$store.commit("setIsLoading", true)
-      await axios
-        .get("/api/v1/teams/get_my_team")
-        .then((response) => {
-          console.log(response.data)
-          this.team = response.data
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+      await TeamService.getMyTeam().then((response) => {
+        this.team = response.data
+      })
+
       this.$store.commit("setIsLoading", false)
     },
   },

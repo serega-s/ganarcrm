@@ -19,7 +19,12 @@
         <form @submit.prevent="getLeads">
           <div class="field has-addons">
             <div class="control">
-              <input type="text" class="input" v-model="query" placeholder="Lead Name" />
+              <input
+                type="text"
+                class="input"
+                v-model="query"
+                placeholder="Lead Name"
+              />
             </div>
             <div class="control">
               <button class="button is-success">Search</button>
@@ -83,7 +88,7 @@
 </template>
 
 <script>
-import axios from "axios"
+import LeadService from "../../services/lead.service"
 export default {
   name: "Leads",
   data() {
@@ -115,18 +120,12 @@ export default {
       this.showNextButton = false
       this.showPreviousButton = false
 
-      await axios
-        .get(`/api/v1/leads/`)
-        .then((response) => {
-          this.num_leads = response.data.count
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+      await LeadService.getLeads().then((response) => {
+        this.num_leads = response.data.count
+      })
 
-      await axios
-        .get(`/api/v1/leads/?page=${this.currentPage}&search=${this.query}`)
-        .then((response) => {
+      await LeadService.paginateLeads(this.currentPage, this.query).then(
+        (response) => {
           this.leads = response.data.results
 
           if (response.data.next) {
@@ -135,10 +134,8 @@ export default {
           if (response.data.previous) {
             this.showPreviousButton = true
           }
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+        }
+      )
 
       this.$store.commit("setIsLoading", false)
     },

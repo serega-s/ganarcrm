@@ -63,7 +63,8 @@
 </template>
 
 <script>
-import axios from "axios"
+import ClientService from '../../services/client.service'
+import NoteService from '../../services/note.service'
 export default {
   name: "Client",
   data() {
@@ -82,8 +83,7 @@ export default {
 
       const clientID = this.$route.params.id
 
-      axios
-        .post(`/api/v1/clients/delete_client/${clientID}/`)
+      await ClientService.deleteClient(clientID)
         .then((response) => {
           console.log(response.data)
 
@@ -100,8 +100,7 @@ export default {
 
       const clientID = this.$route.params.id
 
-      axios
-        .get(`/api/v1/clients/${clientID}/`)
+      await ClientService.getClient(clientID)
         .then((response) => {
           this.client = response.data
         })
@@ -109,8 +108,7 @@ export default {
           console.log(error)
         })
 
-      await axios
-        .get(`/api/v1/notes/?client_id=${clientID}`)
+      await NoteService.getClientNotes(clientID)
         .then((response) => {
           this.notes = response.data
           console.log(this.notes)

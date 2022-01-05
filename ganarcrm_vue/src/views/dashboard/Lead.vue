@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import axios from "axios"
+import LeadService from '../../services/lead.service'
 export default {
   name: "Lead",
   data() {
@@ -72,15 +72,11 @@ export default {
 
       const leadID = this.$route.params.id
 
-      axios
-        .post(`/api/v1/leads/delete_lead/${leadID}/`)
+      await LeadService.deleteLead(leadID)
         .then((response) => {
           console.log(response.data)
 
           this.$router.push({ name: "Leads" })
-        })
-        .catch((error) => {
-          console.log(error)
         })
 
       this.$store.commit("setIsLoading", false)
@@ -90,8 +86,7 @@ export default {
 
       const leadID = this.$route.params.id
 
-      axios
-        .get(`/api/v1/leads/${leadID}/`)
+      await LeadService.getLead(leadID)
         .then((response) => {
           this.lead = response.data
         })
@@ -107,15 +102,12 @@ export default {
       const data = {
         lead_id: leadID,
       }
-      await axios
-        .post(`/api/v1/convert_lead_to_client/`, data)
+      await LeadService.convertLeadToClient(data)
         .then((response) => {
           console.log("converted to client")
           this.$router.push("/dashboard/clients")
         })
-        .catch((error) => {
-          console.log(error)
-        })
+        
       this.$store.commit("setIsLoading", false)
     },
   },

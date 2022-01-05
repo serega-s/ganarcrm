@@ -12,7 +12,7 @@
                 type="email"
                 name="email"
                 class="input"
-                v-model="username"
+                v-model="email"
                 placeholder="Email"
               />
             </div>
@@ -66,7 +66,7 @@ export default {
   name: "LogIn",
   data() {
     return {
-      username: "",
+      email: "",
       password: "",
       errors: [],
     }
@@ -79,25 +79,23 @@ export default {
       this.$store.commit("setIsLoading", true)
 
       axios.defaults.headers.common["Authorization"] = ""
-      localStorage.removeItem("token")
 
       this.errors = []
 
-      if (!this.username) {
-        this.errors.push("Username field is missing!")
+      if (!this.email) {
+        this.errors.push("Email field is missing!")
         this.$store.commit("setIsLoading", false)
       } else if (!this.password) {
         this.errors.push("Password field is missing!")
         this.$store.commit("setIsLoading", false)
       } else if (!this.errors.length) {
         const formData = {
-          username: this.username,
+          email: this.email,
           password: this.password,
         }
 
         await AuthService.login(formData)
           .then((response) => {
-            console.log('login', response)
             const { access, refresh } = response.data
             if (access && refresh) {
               this.$store.commit("setToken", { access, refresh })
@@ -109,6 +107,7 @@ export default {
           })
           .catch((error) => {
             this.$store.commit("setIsLoading", false)
+            
             if (error.response) {
               for (const property in error.response.data) {
                 this.errors.push(`${error.response.data[property]}`)
@@ -119,19 +118,17 @@ export default {
           })
 
         await UserService.getMe().then((response) => {
-          console.log('getMe', response)
           this.$store.commit("setUser", {
             id: response.data.id,
-            username: response.data.username,
+            email: response.data.email,
             isAuthenticated: true,
           })
-          localStorage.setItem("username", response.data.username)
+          localStorage.setItem("email", response.data.email)
           localStorage.setItem("userid", response.data.id)
         })
 
         await TeamService.getMyTeam()
           .then((response) => {
-            console.log('getMyTeam', response)
 
             this.$store.commit("setTeam", {
               id: response.data.id,
