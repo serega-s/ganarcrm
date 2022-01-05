@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import Breadcrumb from "../../components/dashboard/Breadcrumb.vue"
+import Breadcrumb from "@/components/dashboard/Breadcrumb.vue"
 import ClientService from "../../services/client.service"
 import NoteService from "../../services/note.service"
 
@@ -118,17 +118,10 @@ export default {
         .then((response) => {
           this.client = response.data
         })
-        .catch((error) => {
-          console.log(error)
-        })
 
       await NoteService.getClientNotes(clientID)
         .then((response) => {
           this.notes = response.data
-          console.log(this.notes)
-        })
-        .catch((error) => {
-          console.log(error)
         })
 
       this.$store.commit("setIsLoading", false)

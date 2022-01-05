@@ -1,8 +1,8 @@
-# from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
-User = get_user_model()
 from django.db import models
 from team.models import Team
+
+User = get_user_model()
 
 
 class Lead(models.Model):
@@ -43,7 +43,8 @@ class Lead(models.Model):
         max_length=25, choices=CHOICES_STATUS, default=NEW)
     priority = models.CharField(
         max_length=25, choices=CHOICES_PRIORITY, default=MEDIUM)
-    assigned_to = models.ForeignKey(User, related_name='assignedleads', blank=True, null=True,on_delete=models.CASCADE)
+    assigned_to = models.ForeignKey(
+        User, related_name='assignedleads', blank=True, null=True, on_delete=models.CASCADE)
     created_by = models.ForeignKey(
         User, related_name="leads", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)

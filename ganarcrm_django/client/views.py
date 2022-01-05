@@ -1,13 +1,12 @@
-# from django.contrib.auth.models import User
 from django.http.response import Http404
-from lead.models import Lead
-from rest_framework import filters, status, viewsets
+
+from rest_framework import filters, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-from rest_framework.views import APIView
-from team.models import Team
 
+from team.models import Team
+from lead.models import Lead
 from .models import Client, Note
 from .serializers import ClientSerializer, NoteSerializer
 
@@ -64,6 +63,7 @@ def convert_lead_to_client(request):
                                    email=lead.email, phone=lead.phone, website=lead.website, created_by=request.user)
 
     return Response()
+
 
 @api_view(['POST'])
 def delete_client(request, client_id):

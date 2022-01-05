@@ -1,19 +1,18 @@
-from .serializers import TeamSerializer, UserSerializer
-from .models import Plan, Team
-from stripe.api_resources import line_item, payment_method
+import stripe
+from datetime import datetime
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status, viewsets
+
 from django.views.decorators.csrf import csrf_exempt
 from django.http.response import Http404, HttpResponse
-import json
-from datetime import datetime
-
-import stripe
 from django.conf import settings
-# from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
+
+from .serializers import TeamSerializer
+from user.serializers import UserSerializer
+from .models import Plan, Team
 
 User = get_user_model()
 

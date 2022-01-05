@@ -1,14 +1,14 @@
-# from django.contrib.auth.models import User
-from django.contrib.auth import get_user_model
-User = get_user_model()
-from rest_framework import filters, viewsets
-from rest_framework.decorators import api_view
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.decorators import api_view
+from rest_framework import filters, viewsets
+from django.contrib.auth import get_user_model
+
+from .serializers import LeadSerializer
+from .models import Lead
 from team.models import Team
 
-from .models import Lead
-from .serializers import LeadSerializer
+User = get_user_model()
 
 
 class LeadPagination(PageNumberPagination):
@@ -39,6 +39,7 @@ class LeadViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         team = Team.objects.filter(members__in=[self.request.user]).first()
         serializer.save(created_by=self.request.user, team=team)
+
 
 @api_view(['POST'])
 def delete_lead(request, lead_id):

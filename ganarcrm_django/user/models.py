@@ -13,8 +13,6 @@ class CustomUserManager(BaseUserManager):
         """
         if not email:
             raise ValueError(_('The Email must be set'))
-        # if not username:
-        #     raise ValueError(_('Username must be set'))
         if not password:
             raise ValueError(_('Password must be set'))
 
@@ -42,17 +40,12 @@ class CustomUserManager(BaseUserManager):
 class User(AbstractUser):
     username = None
     email = models.CharField(max_length=200, unique=True)
-    # password = models.CharField(max_length=200)
 
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
     # requred for creating user
     REQUIRED_FIELDS = []
-
-    # class Meta:
-    #     ordering = ['-date_joined']
-    #     verbose_name_plural="Custom Users"
 
     def __str__(self):
         return f'{self.email}'
