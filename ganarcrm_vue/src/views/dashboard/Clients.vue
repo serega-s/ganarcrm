@@ -4,7 +4,7 @@
       <div class="column is-12">
         <Breadcrumb>
           <li>
-            <router-link :to="{ name: 'Dashboard' }">Dashboard</router-link>
+            <router-link :to="{ name: 'Home' }">Home</router-link>
           </li>
           <li class="is-active">
             <router-link :to="{ name: 'Clients' }">Clients</router-link>

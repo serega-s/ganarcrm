@@ -23,14 +23,6 @@ const routes = [
     component: () => import("../views/About.vue"),
   },
   {
-    path: "/dashboard",
-    name: "Dashboard",
-    component: () => import(`@/views/dashboard/Dashboard.vue`),
-    meta: {
-      requireLogin: true,
-    },
-  },
-  {
     path: "/dashboard/my-account",
     name: "MyAccount",
     component: () => import(`@/views/dashboard/MyAccount.vue`),

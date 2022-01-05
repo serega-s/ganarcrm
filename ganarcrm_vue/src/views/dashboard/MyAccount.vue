@@ -4,7 +4,7 @@
       <div class="column is-12">
         <Breadcrumb>
           <li>
-            <router-link :to="{ name: 'Dashboard' }">Dashboard</router-link>
+            <router-link :to="{ name: 'Home' }">Home</router-link>
           </li>
           <li class="is-active">
             <router-link :to="{ name: 'MyAccount' }">My Account</router-link>
@@ -29,13 +29,13 @@
 </template>
 
 <script>
-import Breadcrumb from '../../components/dashboard/Breadcrumb.vue'
+import Breadcrumb from "../../components/dashboard/Breadcrumb.vue"
 import AuthService from "../../services/auth.service"
 
 export default {
   name: "MyAccount",
   components: {
-    Breadcrumb
+    Breadcrumb,
   },
   mounted() {
     document.title = "GanarCRM: Team"
