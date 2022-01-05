@@ -37,7 +37,7 @@
               <router-link to="/sign-up" class="button is-success">
                 <strong>Sign Up</strong>
               </router-link>
-              <router-link to="/log-in" class="button is-light is-outlined">
+              <router-link to="/log-in" class="button is-info is-outlined">
                 Log In
               </router-link>
             </template>

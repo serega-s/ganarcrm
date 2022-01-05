@@ -15,6 +15,10 @@
     rel="icon"
     href="<%= BASE_URL %>favicon.ico"
   />
+  <link
+    rel="manifest"
+    href="/manifest.json"
+  />
   <title><%= htmlWebpackPlugin.options.title %></title>
   <script
     src="https://js.stripe.com/v3"
@@ -49,11 +53,9 @@
             // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
             el.classList.toggle('is-active')
             $target.classList.toggle('is-active')
-
           })
         })
       }
-
     })
   </script>
 </body>

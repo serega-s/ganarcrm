@@ -1,7 +1,7 @@
 <template>
   <div>
     <Navbar />
-
+    <PWAPrompt />
     <div
       class="is-loading-bar has-text-centered"
       :class="{ 'is-loading': $store.state.isLoading }"
@@ -19,6 +19,7 @@
 <script>
 import Navbar from "@/components/layout/Navbar"
 import Footer from "@/components/layout/Footer"
+import PWAPrompt from './components/pwa/PWAPrompt'
 import axios from "axios"
 import EventBus from "./common/EventBus"
 export default {
@@ -26,6 +27,7 @@ export default {
   components: {
     Navbar,
     Footer,
+    PWAPrompt
   },
   beforeCreate() {
     this.$store.commit("initializeStore")
