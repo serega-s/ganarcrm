@@ -1,4 +1,3 @@
-/ganarcrm_vue/node_modules/
-/.vscode/
-/.gitignore
-/venv/
+/.vscode
+/.idea
+/venv
