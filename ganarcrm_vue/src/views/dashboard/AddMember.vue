@@ -2,6 +2,15 @@
   <div class="container">
     <div class="columns is-multiline">
       <div class="column is-12">
+        <Breadcrumb>
+          <li>
+            <router-link :to="{ name: 'Dashboard' }">Dashboard</router-link>
+          </li>
+          <li><router-link :to="{ name: 'Team' }">Team</router-link></li>
+          <li class="is-active">
+            <router-link :to="{ name: 'Add Member' }">Add Member</router-link>
+          </li>
+        </Breadcrumb>
         <h1 class="title">Add member</h1>
       </div>
 
@@ -69,9 +78,13 @@ import axios from "axios"
 import { toast } from "bulma-toast"
 import AuthService from "../../services/auth.service"
 import UserService from "../../services/user.service"
+import Breadcrumb from "@/components/dashboard/Breadcrumb.vue"
 
 export default {
   name: "AddMember",
+  components: {
+    Breadcrumb,
+  },
   data() {
     return {
       email: "",

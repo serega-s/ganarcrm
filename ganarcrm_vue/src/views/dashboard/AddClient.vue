@@ -2,6 +2,15 @@
   <div class="container">
     <div class="columns is-multiline">
       <div class="column is-12">
+        <Breadcrumb>
+          <li>
+            <router-link :to="{ name: 'Dashboard' }">Dashboard</router-link>
+          </li>
+          <li><router-link :to="{ name: 'Clients' }">Clients</router-link></li>
+          <li class="is-active">
+            <router-link :to="{ name: 'AddClient' }">Add Client</router-link>
+          </li>
+        </Breadcrumb>
         <h1 class="title">Add client</h1>
       </div>
       <div class="column is-half is-offset-one-quarter">
@@ -88,10 +97,14 @@
 
 <script>
 import axios from "axios"
+import Breadcrumb from "@/components/dashboard/Breadcrumb.vue"
 import { toast } from "bulma-toast"
-import ClientService from '../../services/client.service'
+import ClientService from "../../services/client.service"
 export default {
   name: "AddClient",
+  components: {
+    Breadcrumb,
+  },
   data() {
     return {
       name: "",
@@ -116,18 +129,17 @@ export default {
         website: this.website,
       }
 
-      await ClientService.addClient(client)
-        .then((response) => {
-          toast({
-            message: "The client was created",
-            type: "is-success",
-            dismissible: true,
-            pauseOnHover: true,
-            duration: 2000,
-            position: "bottom-right",
-          })
-          this.$router.push({ name: "Clients" })
+      await ClientService.addClient(client).then((response) => {
+        toast({
+          message: "The client was created",
+          type: "is-success",
+          dismissible: true,
+          pauseOnHover: true,
+          duration: 2000,
+          position: "bottom-right",
         })
+        this.$router.push({ name: "Clients" })
+      })
 
       this.$store.commit("setIsLoading", false)
     },

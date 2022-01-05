@@ -2,6 +2,15 @@
   <div class="container">
     <div class="columns is-multiline">
       <div class="column is-12">
+        <Breadcrumb>
+          <li>
+            <router-link :to="{ name: 'Dashboard' }">Dashboard</router-link>
+          </li>
+          <li><router-link :to="{ name: 'Leads' }">Leads</router-link></li>
+          <li class="is-active">
+            <router-link :to="{ name: 'AddLead' }">Add Lead</router-link>
+          </li>
+        </Breadcrumb>
         <h1 class="title">Add lead</h1>
       </div>
       <div class="column is-half is-offset-one-quarter">
@@ -141,11 +150,14 @@
 </template>
 
 <script>
-import axios from "axios"
 import { toast } from "bulma-toast"
 import LeadService from "../../services/lead.service"
+import Breadcrumb from "@/components/dashboard/Breadcrumb.vue"
 export default {
   name: "AddLead",
+  components: {
+    Breadcrumb,
+  },
   data() {
     return {
       company: "",
@@ -178,18 +190,17 @@ export default {
         priority: this.priority,
       }
 
-      await LeadService.addLead(lead)
-        .then((response) => {
-          toast({
-            message: "The lead was created",
-            type: "is-success",
-            dismissible: true,
-            pauseOnHover: true,
-            duration: 2000,
-            position: "bottom-right",
-          })
-          this.$router.push({ name: "Leads" })
+      await LeadService.addLead(lead).then((response) => {
+        toast({
+          message: "The lead was created",
+          type: "is-success",
+          dismissible: true,
+          pauseOnHover: true,
+          duration: 2000,
+          position: "bottom-right",
         })
+        this.$router.push({ name: "Leads" })
+      })
 
       this.$store.commit("setIsLoading", false)
     },

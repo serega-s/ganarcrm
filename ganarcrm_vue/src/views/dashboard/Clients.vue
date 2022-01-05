@@ -2,6 +2,14 @@
   <div class="container">
     <div class="columns is-multiline">
       <div class="column is-12">
+        <Breadcrumb>
+          <li>
+            <router-link :to="{ name: 'Dashboard' }">Dashboard</router-link>
+          </li>
+          <li class="is-active">
+            <router-link :to="{ name: 'Clients' }">Clients</router-link>
+          </li>
+        </Breadcrumb>
         <h1 class="title">Clients</h1>
 
         <router-link
@@ -85,8 +93,13 @@
 <script>
 import axios from "axios"
 import ClientService from "../../services/client.service"
+import Breadcrumb from '../../components/dashboard/Breadcrumb.vue'
+
 export default {
   name: "Clients",
+  components: {
+    Breadcrumb
+  },
   data() {
     return {
       clients: [],
@@ -123,8 +136,8 @@ export default {
         .catch((error) => {
           console.log(error)
         })
-      await ClientService.paginateClients(this.currentPage, this.query)
-        .then((response) => {
+      await ClientService.paginateClients(this.currentPage, this.query).then(
+        (response) => {
           this.clients = response.data.results
 
           if (response.data.next) {
@@ -133,7 +146,8 @@ export default {
           if (response.data.previous) {
             this.showPreviousButton = true
           }
-        })
+        }
+      )
 
       this.$store.commit("setIsLoading", false)
     },

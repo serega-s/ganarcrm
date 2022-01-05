@@ -2,6 +2,14 @@
   <div class="container">
     <div class="columns is-multiline">
       <div class="column is-12">
+        <Breadcrumb>
+          <li>
+            <router-link :to="{ name: 'Dashboard' }">Dashboard</router-link>
+          </li>
+          <li class="is-active">
+            <router-link :to="{ name: 'Leads' }">Leads</router-link>
+          </li>
+        </Breadcrumb>
         <h1 class="title">Leads</h1>
 
         <router-link
@@ -89,8 +97,12 @@
 
 <script>
 import LeadService from "../../services/lead.service"
+import Breadcrumb from '../../components/dashboard/Breadcrumb.vue'
 export default {
   name: "Leads",
+  components: {
+    Breadcrumb
+  },
   data() {
     return {
       leads: [],

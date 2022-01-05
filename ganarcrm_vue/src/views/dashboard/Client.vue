@@ -2,6 +2,19 @@
   <div class="container">
     <div class="columns is-multiline">
       <div class="column is-12">
+        <Breadcrumb>
+          <li>
+            <router-link :to="{ name: 'Dashboard' }">Dashboard</router-link>
+          </li>
+          <li>
+            <router-link :to="{ name: 'Clients' }">Clients</router-link>
+          </li>
+          <li class="is-active">
+            <router-link :to="{ name: 'Client', params: { id: client.id } }">{{
+              client.id
+            }}</router-link>
+          </li>
+        </Breadcrumb>
         <h1 class="title">{{ client.name }}</h1>
         <div class="buttons">
           <button @click="deleteClient" class="button is-danger">
@@ -63,10 +76,15 @@
 </template>
 
 <script>
-import ClientService from '../../services/client.service'
-import NoteService from '../../services/note.service'
+import Breadcrumb from "../../components/dashboard/Breadcrumb.vue"
+import ClientService from "../../services/client.service"
+import NoteService from "../../services/note.service"
+
 export default {
   name: "Client",
+  components: {
+    Breadcrumb,
+  },
   data() {
     return {
       client: {},

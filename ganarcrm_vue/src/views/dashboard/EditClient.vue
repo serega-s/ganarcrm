@@ -2,6 +2,26 @@
   <div class="container">
     <div class="columns is-multiline">
       <div class="column is-12">
+        <Breadcrumb>
+          <li>
+            <router-link :to="{ name: 'Dashboard' }">Dashboard</router-link>
+          </li>
+          <li>
+            <router-link :to="{ name: 'Clients' }">Clients</router-link>
+          </li>
+          <li>
+            <router-link
+              :to="{ name: 'Client', params: { id: $route.params.id } }"
+              >{{ client.id }}</router-link
+            >
+          </li>
+          <li class="is-active">
+            <router-link
+              :to="{ name: 'EditClient', params: { id: $route.params.id } }"
+              >Edit Client</router-link
+            >
+          </li>
+        </Breadcrumb>
         <h1 class="title">Edit "{{ client.name }}"</h1>
       </div>
       <div class="column is-half is-offset-one-quarter">
@@ -85,8 +105,12 @@
 import axios from "axios"
 import { toast } from "bulma-toast"
 import ClientService from "../../services/client.service"
+import Breadcrumb from "../../components/dashboard/Breadcrumb.vue"
 export default {
   name: "AddClient",
+  components: {
+    Breadcrumb,
+  },
   data() {
     return {
       client: {},
@@ -102,10 +126,9 @@ export default {
 
       const clientID = this.$route.params.id
 
-      await ClientService.getClient(clientID)
-        .then((response) => {
-          this.client = response.data
-        })
+      await ClientService.getClient(clientID).then((response) => {
+        this.client = response.data
+      })
 
       this.$store.commit("setIsLoading", false)
     },
@@ -114,19 +137,18 @@ export default {
 
       const clientID = this.$route.params.id
 
-      await ClientService.editClient(clientID, this.client)
-        .then((response) => {
-          toast({
-            message: "The client was updated",
-            type: "is-success",
-            dismissible: true,
-            pauseOnHover: true,
-            duration: 2000,
-            position: "bottom-right",
-          })
-
-          this.$router.push({ name: "Clients" })
+      await ClientService.editClient(clientID, this.client).then((response) => {
+        toast({
+          message: "The client was updated",
+          type: "is-success",
+          dismissible: true,
+          pauseOnHover: true,
+          duration: 2000,
+          position: "bottom-right",
         })
+
+        this.$router.push({ name: "Clients" })
+      })
 
       this.$store.commit("setIsLoading", false)
     },

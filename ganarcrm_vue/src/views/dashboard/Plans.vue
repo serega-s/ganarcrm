@@ -2,6 +2,17 @@
   <div class="container">
     <div class="columns is-multiline">
       <div class="column is-12">
+        <Breadcrumb>
+          <li>
+            <router-link :to="{ name: 'Dashboard' }">Dashboard</router-link>
+          </li>
+          <li>
+            <router-link :to="{ name: 'Team' }">Team</router-link>
+          </li>
+          <li class="is-active">
+            <router-link :to="{ name: 'Plans' }">Plans</router-link>
+          </li>
+        </Breadcrumb>
         <h1 class="title">Plans</h1>
       </div>
 
@@ -99,9 +110,13 @@ import { toast } from "bulma-toast"
 
 import StripeService from "../../services/stripe.service"
 import TeamService from "../../services/team.service"
+import Breadcrumb from '../../components/dashboard/Breadcrumb.vue'
 
 export default {
   name: "Plans",
+  components: {
+    Breadcrumb
+  },
   data() {
     return {
       pub_key: "",

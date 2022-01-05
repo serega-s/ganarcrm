@@ -2,6 +2,26 @@
   <div class="container">
     <div class="columns is-multiline">
       <div class="column is-12">
+        <Breadcrumb>
+          <li>
+            <router-link :to="{ name: 'Dashboard' }">Dashboard</router-link>
+          </li>
+          <li>
+            <router-link :to="{ name: 'Leads' }">Leads</router-link>
+          </li>
+          <li>
+            <router-link
+              :to="{ name: 'Lead', params: { id: $route.params.id } }"
+              >{{ lead.id }}</router-link
+            >
+          </li>
+          <li class="is-active">
+            <router-link
+              :to="{ name: 'EditLead', params: { id: $route.params.id } }"
+              >Edit Lead</router-link
+            >
+          </li>
+        </Breadcrumb>
         <h1 class="title">Edit {{ lead.company }}</h1>
       </div>
 
@@ -122,9 +142,13 @@ import { toast } from "bulma-toast"
 
 import LeadService from "../../services/lead.service"
 import TeamService from "../../services/team.service"
+import Breadcrumb from "../../components/dashboard/Breadcrumb.vue"
 
 export default {
   name: "EditLead",
+  components: {
+    Breadcrumb,
+  },
   data() {
     return {
       lead: {},

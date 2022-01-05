@@ -2,6 +2,21 @@
   <div class="container">
     <div class="columns is-multiline">
       <div class="column is-12">
+        <Breadcrumb>
+          <li>
+            <router-link :to="{ name: 'Dashboard' }">Dashboard</router-link>
+          </li>
+          <li><router-link :to="{ name: 'Clients' }">Clients</router-link></li>
+          <li>
+            <router-link :to="{ name: 'Client', params: { id: client_id } }">{{
+              client_id
+            }}</router-link>
+          </li>
+          <li class="is-active">
+            <router-link :to="{ name: 'AddNote' }">Add Note</router-link>
+          </li>
+        </Breadcrumb>
+
         <h1 class="title">Add note</h1>
       </div>
       <div class="column is-half is-offset-one-quarter">
@@ -47,8 +62,12 @@
 import axios from "axios"
 import { toast } from "bulma-toast"
 import NoteService from "../../services/note.service"
+import Breadcrumb from "@/components/dashboard/Breadcrumb.vue"
 export default {
   name: "AddNote",
+  components: {
+    Breadcrumb,
+  },
   data() {
     return {
       name: "",

@@ -2,6 +2,14 @@
   <div class="container">
     <div class="columns is-multiline">
       <div class="column is-12">
+        <Breadcrumb>
+          <li>
+            <router-link :to="{ name: 'Dashboard' }">Dashboard</router-link>
+          </li>
+          <li class="is-active">
+            <router-link :to="{ name: 'MyAccount' }">My Account</router-link>
+          </li>
+        </Breadcrumb>
         <h1 class="title">My Account</h1>
         {{ $store.state.user.email }}
       </div>
@@ -21,10 +29,14 @@
 </template>
 
 <script>
+import Breadcrumb from '../../components/dashboard/Breadcrumb.vue'
 import AuthService from "../../services/auth.service"
 
 export default {
   name: "MyAccount",
+  components: {
+    Breadcrumb
+  },
   mounted() {
     document.title = "GanarCRM: Team"
   },

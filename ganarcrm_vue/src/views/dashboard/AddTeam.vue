@@ -2,6 +2,14 @@
   <div class="container">
     <div class="columns is-multiline">
       <div class="column is-12">
+        <Breadcrumb>
+          <li>
+            <router-link :to="{ name: 'Dashboard' }">Dashboard</router-link>
+          </li>
+          <li class="is-active">
+            <router-link :to="{ name: 'AddTeam' }">Add Team</router-link>
+          </li>
+        </Breadcrumb>
         <h1 class="title">Add team</h1>
       </div>
 
@@ -35,10 +43,14 @@
 <script>
 import axios from "axios"
 import { toast } from "bulma-toast"
-import TeamService from '../../services/team.service'
+import TeamService from "../../services/team.service"
+import Breadcrumb from "../../components/dashboard/Breadcrumb.vue"
 
 export default {
   name: "AddTeam",
+  components: {
+    Breadcrumb,
+  },
   data() {
     return {
       name: "",
@@ -55,28 +67,26 @@ export default {
         name: this.name,
       }
 
-      await TeamService.addTeam(team)
-        .then((response) => {
-
-          this.$store.commit("setTeam", {
-            id: response.data.id,
-            name: response.data.name,
-            plan: response.data.plan.name,
-            max_leads: response.data.plan.max_leads,
-            max_clients: response.data.plan.max_clients,
-          })
-
-          toast({
-            message: "The team was added",
-            type: "is-success",
-            dismissible: true,
-            pauseOnHover: true,
-            duration: 2000,
-            position: "bottom-right",
-          })
-
-          this.$router.push("/dashboard/team")
+      await TeamService.addTeam(team).then((response) => {
+        this.$store.commit("setTeam", {
+          id: response.data.id,
+          name: response.data.name,
+          plan: response.data.plan.name,
+          max_leads: response.data.plan.max_leads,
+          max_clients: response.data.plan.max_clients,
         })
+
+        toast({
+          message: "The team was added",
+          type: "is-success",
+          dismissible: true,
+          pauseOnHover: true,
+          duration: 2000,
+          position: "bottom-right",
+        })
+
+        this.$router.push("/dashboard/team")
+      })
       this.$store.commit("setIsLoading", false)
     },
   },

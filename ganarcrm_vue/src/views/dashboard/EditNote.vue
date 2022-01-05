@@ -2,6 +2,25 @@
   <div class="container">
     <div class="columns is-multiline">
       <div class="column is-12">
+        <Breadcrumb>
+          <li>
+            <router-link :to="{ name: 'Dashboard' }">Dashboard</router-link>
+          </li>
+          <li>
+            <router-link :to="{ name: 'Clients' }">Clients</router-link>
+          </li>
+          <li>
+            <router-link
+              :to="{ name: 'Client', params: { id: $route.params.id } }"
+              >{{ $route.params.id }}</router-link
+            >
+          </li>
+          <li class="is-active">
+            <router-link :to="{ name: 'EditNote', params: { id: note.id } }">{{
+              note.id
+            }}</router-link>
+          </li>
+        </Breadcrumb>
         <h1 class="title">Edit note</h1>
       </div>
       <div class="column is-half is-offset-one-quarter">
@@ -38,9 +57,13 @@
 
 <script>
 import { toast } from "bulma-toast"
-import NoteService from '../../services/note.service'
+import NoteService from "../../services/note.service"
+import Breadcrumb from "../../components/dashboard/Breadcrumb.vue"
 export default {
   name: "EditNote",
+  components: {
+    Breadcrumb,
+  },
   data() {
     return {
       note: {},
@@ -56,21 +79,20 @@ export default {
 
       const clientID = this.$route.params.id
 
-      await NoteService.editNote(clientID, this.note)
-        .then((response) => {
-          toast({
-            message: "The note was updated",
-            type: "is-success",
-            dismissible: true,
-            pauseOnHover: true,
-            duration: 2000,
-            position: "bottom-right",
-          })
-          this.$router.push({
-            name: "Client",
-            params: { id: this.$route.params.id },
-          })
+      await NoteService.editNote(clientID, this.note).then((response) => {
+        toast({
+          message: "The note was updated",
+          type: "is-success",
+          dismissible: true,
+          pauseOnHover: true,
+          duration: 2000,
+          position: "bottom-right",
         })
+        this.$router.push({
+          name: "Client",
+          params: { id: this.$route.params.id },
+        })
+      })
 
       this.$store.commit("setIsLoading", false)
     },
@@ -80,10 +102,9 @@ export default {
       const noteID = this.$route.params.note_id
       const clientID = this.$route.params.id
 
-      await NoteService.getNote(noteID, clientID)
-        .then((response) => {
-          this.note = response.data
-        })
+      await NoteService.getNote(noteID, clientID).then((response) => {
+        this.note = response.data
+      })
 
       this.$store.commit("setIsLoading", false)
     },
