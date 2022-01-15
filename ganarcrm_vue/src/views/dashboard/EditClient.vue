@@ -102,7 +102,6 @@
 </template>
 
 <script>
-import axios from "axios"
 import { toast } from "bulma-toast"
 import ClientService from "../../services/client.service"
 import Breadcrumb from "../../components/dashboard/Breadcrumb.vue"
@@ -126,9 +125,12 @@ export default {
 
       const clientID = this.$route.params.id
 
-      await ClientService.getClient(clientID).then((response) => {
+      try {
+        const response = await ClientService.getClient(clientID)
         this.client = response.data
-      })
+      } catch (e) {
+        console.error(e)
+      }
 
       this.$store.commit("setIsLoading", false)
     },
@@ -137,7 +139,8 @@ export default {
 
       const clientID = this.$route.params.id
 
-      await ClientService.editClient(clientID, this.client).then((response) => {
+      try {
+        const response = await ClientService.editClient(clientID, this.client)
         toast({
           message: "The client was updated",
           type: "is-success",
@@ -146,9 +149,10 @@ export default {
           duration: 2000,
           position: "bottom-right",
         })
-
         this.$router.push({ name: "Clients" })
-      })
+      } catch (e) {
+        console.error(e)
+      }
 
       this.$store.commit("setIsLoading", false)
     },

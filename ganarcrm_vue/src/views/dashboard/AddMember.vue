@@ -74,7 +74,6 @@
 </template>
 
 <script>
-import axios from "axios"
 import { toast } from "bulma-toast"
 import AuthService from "../../services/auth.service"
 import UserService from "../../services/user.service"

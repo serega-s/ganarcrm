@@ -67,7 +67,8 @@ export default {
         name: this.name,
       }
 
-      await TeamService.addTeam(team).then((response) => {
+      try {
+        await TeamService.addTeam(team)
         this.$store.commit("setTeam", {
           id: response.data.id,
           name: response.data.name,
@@ -85,8 +86,11 @@ export default {
           position: "bottom-right",
         })
 
-        this.$router.push("/dashboard/team")
-      })
+        this.$router.push({ name: "Team" })
+      } catch (e) {
+        console.error(e)
+      }
+
       this.$store.commit("setIsLoading", false)
     },
   },

@@ -129,7 +129,8 @@ export default {
         website: this.website,
       }
 
-      await ClientService.addClient(client).then((response) => {
+      try {
+        const response = await ClientService.addClient(client)
         toast({
           message: "The client was created",
           type: "is-success",
@@ -139,7 +140,9 @@ export default {
           position: "bottom-right",
         })
         this.$router.push({ name: "Clients" })
-      })
+      } catch (e) {
+        console.error(e)
+      }
 
       this.$store.commit("setIsLoading", false)
     },

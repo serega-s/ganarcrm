@@ -88,7 +88,8 @@ export default {
         client_id: this.client_id,
       }
 
-      await NoteService.addNote(note).then((response) => {
+      try {
+        const response = await NoteService.addNote(note)
         toast({
           message: "The note was added",
           type: "is-success",
@@ -101,7 +102,9 @@ export default {
           name: "Client",
           params: { id: this.$route.params.id },
         })
-      })
+      } catch (e) {
+        console.error(e)
+      }
 
       this.$store.commit("setIsLoading", false)
     },

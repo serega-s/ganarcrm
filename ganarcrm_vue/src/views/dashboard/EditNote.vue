@@ -79,7 +79,8 @@ export default {
 
       const clientID = this.$route.params.id
 
-      await NoteService.editNote(clientID, this.note).then((response) => {
+      try {
+        const response = await NoteService.editNote(clientID, this.note)
         toast({
           message: "The note was updated",
           type: "is-success",
@@ -92,7 +93,9 @@ export default {
           name: "Client",
           params: { id: this.$route.params.id },
         })
-      })
+      } catch (e) {
+        console.error(e)
+      }
 
       this.$store.commit("setIsLoading", false)
     },
@@ -102,9 +105,12 @@ export default {
       const noteID = this.$route.params.note_id
       const clientID = this.$route.params.id
 
-      await NoteService.getNote(noteID, clientID).then((response) => {
+      try {
+        const response = await NoteService.getNote(noteID, clientID)
         this.note = response.data
-      })
+      } catch (e) {
+        console.error(e)
+      }
 
       this.$store.commit("setIsLoading", false)
     },

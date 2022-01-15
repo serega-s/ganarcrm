@@ -58,7 +58,6 @@
 </template>
 
 <script>
-import axios from "axios"
 import { toast } from "bulma-toast"
 import UserService from "../../services/user.service"
 import Breadcrumb from "../../components/dashboard/Breadcrumb.vue"
@@ -82,34 +81,35 @@ export default {
 
       const userID = this.$route.params.id
 
-      await UserService.editMember(userID, this.user)
-        .then((response) => {
-          toast({
-            message: "The user was updated",
-            type: "is-success",
-            dismissible: true,
-            pauseOnHover: true,
-            duration: 2000,
-            position: "bottom-right",
-          })
-          this.$router.push({ name: "MyAccount" })
+      try {
+        const response = await UserService.editMember(userID, this.user)
+        toast({
+          message: "The user was updated",
+          type: "is-success",
+          dismissible: true,
+          pauseOnHover: true,
+          duration: 2000,
+          position: "bottom-right",
         })
-        .catch((error) => {
-          console.log(error.response)
-        })
+        this.$router.push({ name: "MyAccount" })
+      } catch (e) {
+        console.error(e)
+      }
 
       this.$store.commit("setIsLoading", false)
     },
     async getUser() {
       this.$store.commit("setIsLoading", true)
+
       const userID = this.$route.params.id
-      UserService.getUser(userID)
-        .then((response) => {
-          this.user = response.data
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+
+      try {
+        const response = await UserService.getUser(userID)
+        this.user = response.data
+      } catch (e) {
+        console.error(e)
+      }
+
       this.$store.commit("setIsLoading", false)
     },
   },

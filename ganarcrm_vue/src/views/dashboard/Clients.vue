@@ -91,7 +91,6 @@
 </template>
 
 <script>
-import axios from "axios"
 import ClientService from "../../services/client.service"
 import Breadcrumb from '../../components/dashboard/Breadcrumb.vue'
 

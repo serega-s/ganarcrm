@@ -65,12 +65,12 @@
 </template>
 
 <script>
-import LeadService from '../../services/lead.service'
-import Breadcrumb from '../../components/dashboard/Breadcrumb.vue'
+import LeadService from "../../services/lead.service"
+import Breadcrumb from "../../components/dashboard/Breadcrumb.vue"
 export default {
   name: "Lead",
   components: {
-    Breadcrumb
+    Breadcrumb,
   },
   data() {
     return {
@@ -87,12 +87,12 @@ export default {
 
       const leadID = this.$route.params.id
 
-      await LeadService.deleteLead(leadID)
-        .then((response) => {
-          console.log(response.data)
-
-          this.$router.push({ name: "Leads" })
-        })
+      try {
+        const response = await LeadService.deleteLead(leadID)
+        this.$router.push({ name: "Leads" })
+      } catch (e) {
+        console.log(e.response)
+      }
 
       this.$store.commit("setIsLoading", false)
     },
@@ -100,14 +100,12 @@ export default {
       this.$store.commit("setIsLoading", true)
 
       const leadID = this.$route.params.id
-
-      await LeadService.getLead(leadID)
-        .then((response) => {
-          this.lead = response.data
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+      try {
+        const response = await LeadService.getLead(leadID)
+        this.lead = response.data
+      } catch (e) {
+        console.log(e.response)
+      }
 
       this.$store.commit("setIsLoading", false)
     },
@@ -117,12 +115,14 @@ export default {
       const data = {
         lead_id: leadID,
       }
-      await LeadService.convertLeadToClient(data)
-        .then((response) => {
-          console.log("converted to client")
-          this.$router.push("/dashboard/clients")
-        })
-        
+      try {
+        await LeadService.convertLeadToClient(data)
+        console.log("converted to client")
+        this.$router.push({ name: "Clients" })
+      } catch (e) {
+        console.error(e)
+      }
+
       this.$store.commit("setIsLoading", false)
     },
   },

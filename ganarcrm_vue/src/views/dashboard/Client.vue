@@ -4,8 +4,7 @@
       <div class="column is-12">
         <Breadcrumb>
           <li>
-            <router-link :to="{ name: 'Home' }">Home
-            </router-link>
+            <router-link :to="{ name: 'Home' }">Home </router-link>
           </li>
           <li>
             <router-link :to="{ name: 'Clients' }">Clients</router-link>
@@ -95,6 +94,7 @@ export default {
   mounted() {
     document.title = "GanarCRM: Client"
     this.getClient()
+    this.getNotes()
   },
   methods: {
     async deleteClient() {
@@ -102,11 +102,12 @@ export default {
 
       const clientID = this.$route.params.id
 
-      await ClientService.deleteClient(clientID)
-        .then((response) => {
-
-          this.$router.push({ name: "Clients" })
-        })
+      try {
+        let response = await ClientService.deleteClient(clientID)
+        this.$router.push({ name: "Clients" })
+      } catch (e) {
+        console.error(e)
+      }
 
       this.$store.commit("setIsLoading", false)
     },
@@ -115,15 +116,25 @@ export default {
 
       const clientID = this.$route.params.id
 
-      await ClientService.getClient(clientID)
-        .then((response) => {
-          this.client = response.data
-        })
+      try {
+        const response = await ClientService.getClient(clientID)
+        this.client = response.data
+      } catch (e) {
+        console.error(e)
+      }
 
-      await NoteService.getClientNotes(clientID)
-        .then((response) => {
-          this.notes = response.data
-        })
+      this.$store.commit("setIsLoading", false)
+    },
+    async getNotes() {
+      this.$store.commit("setIsLoading", true)
+      const clientID = this.$route.params.id
+
+      try {
+        const response = await NoteService.getClientNotes(clientID)
+        this.notes = response.data
+      } catch (e) {
+        console.error(e)
+      }
 
       this.$store.commit("setIsLoading", false)
     },

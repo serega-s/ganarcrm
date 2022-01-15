@@ -29,36 +29,37 @@ export default {
   methods: {
     async checkSession() {
       this.$store.commit("setIsLoading", true)
-      await StripeService.checkSession(this.$route.params.session_id)
-        .then((response) => {
-          this.$store.commit("setTeam", {
-            id: response.data.id,
-            name: response.data.name,
-            plan: response.data.plan.name,
-            max_leads: response.data.plan.max_leads,
-            max_clients: response.data.plan.max_clients,
-          })
+      const sessionID = this.$route.params.session_id
+      try {
+        const response = await StripeService.checkSession(sessionID)
+        this.$store.commit("setTeam", {
+          id: response.data.id,
+          name: response.data.name,
+          plan: response.data.plan.name,
+          max_leads: response.data.plan.max_leads,
+          max_clients: response.data.plan.max_clients,
+        })
 
-          toast({
-            message: "The plan was updated",
-            type: "is-success",
-            dismissible: true,
-            pauseOnHover: true,
-            duration: 200,
-            position: "bottom-right",
-          })
+        toast({
+          message: "The plan was updated",
+          type: "is-success",
+          dismissible: true,
+          pauseOnHover: true,
+          duration: 200,
+          position: "bottom-right",
         })
-        .catch((error) => {
-          this.$store.commit("setIsLoading", false)
-          toast({
-            message: "Something went wrong ...",
-            type: "is-danger",
-            dismissible: true,
-            pauseOnHover: true,
-            duration: 200,
-            position: "bottom-right",
-          })
+      } catch (e) {
+        this.$store.commit("setIsLoading", false)
+        toast({
+          message: "Something went wrong ...",
+          type: "is-danger",
+          dismissible: true,
+          pauseOnHover: true,
+          duration: 200,
+          position: "bottom-right",
         })
+      }
+
       this.$store.commit("setIsLoading", false)
     },
   },

@@ -137,7 +137,6 @@
 </template>
 
 <script>
-import axios from "axios"
 import { toast } from "bulma-toast"
 
 import LeadService from "../../services/lead.service"
@@ -168,9 +167,12 @@ export default {
 
       const leadID = this.$route.params.id
 
-      await LeadService.getLead(leadID).then((response) => {
+      try {
+        const response = await LeadService.getLead(leadID)
         this.lead = response.data
-      })
+      } catch (e) {
+        console.error(e)
+      }
 
       this.$store.commit("setIsLoading", false)
     },
@@ -179,7 +181,8 @@ export default {
 
       const leadID = this.$route.params.id
 
-      await LeadService.editLead(leadID, this.lead).then((response) => {
+      try {
+        const response = await LeadService.editLead(leadID, this.lead)
         toast({
           message: "The lead was updated",
           type: "is-success",
@@ -190,15 +193,20 @@ export default {
         })
 
         this.$router.push(`/dashboard/leads/${leadID}`)
-      })
+      } catch (e) {
+        console.error(e)
+      }
 
       this.$store.commit("setIsLoading", false)
     },
     async getTeam() {
       this.$store.commit("setIsLoading", true)
-      await TeamService.getMyTeam().then((response) => {
+      try {
+        const response = await TeamService.getMyTeam()
         this.team = response.data
-      })
+      } catch (e) {
+        console.error(e)
+      }
 
       this.$store.commit("setIsLoading", false)
     },

@@ -41,10 +41,10 @@
         </template>
         <template v-else>
           <router-link
-              :to="{ name: 'AddTeam' }"
-              class="button is-info is-light is-outlined"
-              >Add Team</router-link
-            >
+            :to="{ name: 'AddTeam' }"
+            class="button is-info is-light is-outlined"
+            >Add Team</router-link
+          >
         </template>
       </div>
 
@@ -94,9 +94,13 @@ export default {
   methods: {
     async getTeam() {
       this.$store.commit("setIsLoading", true)
-      await TeamService.getMyTeam().then((response) => {
+      try {
+        const response = await TeamService.getMyTeam()
         this.team = response.data
-      })
+      } catch (e) {
+        console.error(e)
+      }
+
       this.$store.commit("setIsLoading", false)
     },
   },

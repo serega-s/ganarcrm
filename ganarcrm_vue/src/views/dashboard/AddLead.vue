@@ -190,7 +190,8 @@ export default {
         priority: this.priority,
       }
 
-      await LeadService.addLead(lead).then((response) => {
+      try {
+        const response = await LeadService.addLead(lead)
         toast({
           message: "The lead was created",
           type: "is-success",
@@ -200,7 +201,9 @@ export default {
           position: "bottom-right",
         })
         this.$router.push({ name: "Leads" })
-      })
+      } catch (e) {
+        console.error(e)
+      }
 
       this.$store.commit("setIsLoading", false)
     },

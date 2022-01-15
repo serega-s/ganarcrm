@@ -110,12 +110,12 @@ import { toast } from "bulma-toast"
 
 import StripeService from "../../services/stripe.service"
 import TeamService from "../../services/team.service"
-import Breadcrumb from '../../components/dashboard/Breadcrumb.vue'
+import Breadcrumb from "../../components/dashboard/Breadcrumb.vue"
 
 export default {
   name: "Plans",
   components: {
-    Breadcrumb
+    Breadcrumb,
   },
   data() {
     return {
@@ -135,16 +135,19 @@ export default {
     async getPubKey() {
       this.$store.commit("setIsLoading", true)
 
-      await StripeService.getStripePubKey().then((response) => {
+      try {
+        const response = await StripeService.getStripePubKey()
         this.pub_key = response.data.pub_key
-      })
+      } catch (e) {
+        console.error(e)
+      }
 
       this.$store.commit("setIsLoading", false)
     },
     async cancelPlan() {
       this.$store.commit("setIsLoading", true)
-      await TeamService.cancelPlan().then((response) => {
-
+      try {
+        const response = await TeamService.cancelPlan()
         this.$store.commit("setTeam", {
           id: response.data.id,
           name: response.data.name,
@@ -160,8 +163,11 @@ export default {
           duration: 2000,
           position: "bottom-right",
         })
-        this.$router.push("/dashboard/team")
-      })
+        this.$router.push({ name: "Team" })
+      } catch (e) {
+        console.error(e)
+      }
+
       this.$store.commit("setIsLoading", false)
     },
     async subscribe(plan) {
@@ -171,11 +177,14 @@ export default {
         plan: plan,
       }
 
-      await StripeService.createCheckoutSession(data).then((response) => {
+      try {
+        const response = await StripeService.createCheckoutSession(data)
         return this.stripe.redirectToCheckout({
           sessionId: response.data.sessionId,
         })
-      })
+      } catch (e) {
+        console.error(e)
+      }
 
       this.$store.commit("setIsLoading", false)
     },
