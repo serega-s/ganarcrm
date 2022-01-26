@@ -4,6 +4,10 @@
 ![avatar](ganarcrm_imgs/ganarcrm-2.png)
 ![avatar](ganarcrm_imgs/ganarcrm-3.png)
 ![avatar](ganarcrm_imgs/ganarcrm-4.png)
+![avatar](ganarcrm_imgs/ganarcrm-5.png)
+![avatar](ganarcrm_imgs/ganarcrm-6.png)
+![avatar](ganarcrm_imgs/ganarcrm-7.png)
+![avatar](ganarcrm_imgs/ganarcrm-8.png)
 
 ### For Vue
 
