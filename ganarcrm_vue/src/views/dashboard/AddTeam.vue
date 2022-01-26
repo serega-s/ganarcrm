@@ -68,7 +68,7 @@ export default {
       }
 
       try {
-        await TeamService.addTeam(team)
+        const response = await TeamService.addTeam(team)
         this.$store.commit("setTeam", {
           id: response.data.id,
           name: response.data.name,
