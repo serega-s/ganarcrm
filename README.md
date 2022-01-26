@@ -8,6 +8,9 @@
 ![avatar](ganarcrm_imgs/ganarcrm-6.png)
 ![avatar](ganarcrm_imgs/ganarcrm-7.png)
 ![avatar](ganarcrm_imgs/ganarcrm-8.png)
+![avatar](ganarcrm_imgs/ganarcrm-9.png)
+
+and some pages...
 
 ### For Vue
 
