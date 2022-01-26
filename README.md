@@ -1,9 +1,9 @@
 # GanarCRM
 
-![avatar]("./ganarcrm_imgs/ganarcrm-1.png")
-![avatar]("./ganarcrm_imgs/ganarcrm-2.png")
-![avatar]("./ganarcrm_imgs/ganarcrm-3.png")
-![avatar]("./ganarcrm_imgs/ganarcrm-4.png")
+![avatar](ganarcrm_imgs/ganarcrm-1.png)
+![avatar](ganarcrm_imgs/ganarcrm-2.png)
+![avatar](ganarcrm_imgs/ganarcrm-3.png)
+![avatar](ganarcrm_imgs/ganarcrm-4.png)
 
 ### For Vue
 
