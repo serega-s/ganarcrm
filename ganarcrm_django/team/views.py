@@ -1,23 +1,28 @@
-import stripe
 from datetime import datetime
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from rest_framework import status, viewsets
 
-from django.views.decorators.csrf import csrf_exempt
-from django.http.response import Http404, HttpResponse
+import stripe
 from django.conf import settings
 from django.contrib.auth import get_user_model
-
-from .serializers import TeamSerializer
+from django.http.response import Http404, HttpResponse
+from django.shortcuts import get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework import status, viewsets
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from user.serializers import UserSerializer
+
+from team.services import create_checkout_session
+
 from .models import Plan, Team
+from .serializers import TeamSerializer
 
 User = get_user_model()
 
 
 class TeamViewSet(viewsets.ModelViewSet):
+    """CRUD for teams
+    """
     serializer_class = TeamSerializer
     queryset = Team.objects.all()
 
@@ -32,11 +37,10 @@ class TeamViewSet(viewsets.ModelViewSet):
 
 
 class UserDetail(APIView):
+    """Getting and updating users
+    """
     def get_object(self, pk):
-        try:
-            return User.objects.get(pk=pk)
-        except User.DoesNotExist:
-            raise Http404
+        return get_object_or_404(User, pk=pk)
 
     def get(self, request, pk, format=None):
         user = self.get_object(pk)
@@ -55,6 +59,8 @@ class UserDetail(APIView):
 
 @api_view(['GET'])
 def get_stripe_pub_key(request):
+    """Get Stripe public key
+    """
     pub_key = settings.STRIPE_PUB_KEY
 
     return Response({'pub_key': pub_key})
@@ -62,6 +68,8 @@ def get_stripe_pub_key(request):
 
 @api_view(['GET'])
 def get_my_team(request):
+    """Get my team
+    """
     team = Team.objects.filter(members__in=[request.user]).first()
     serializer = TeamSerializer(team)
 
@@ -70,6 +78,8 @@ def get_my_team(request):
 
 @api_view(["POST"])
 def upgrade_plan(request):
+    """Upgrade a team plan
+    """
     team = Team.objects.filter(members__in=[request.user]).first()
     plan = request.data['plan']
 
@@ -90,6 +100,8 @@ def upgrade_plan(request):
 
 @api_view(['POST'])
 def add_member(request):
+    """Add member into my team
+    """
     team = Team.objects.filter(members__in=[request.user]).first()
     email = request.data['email']
 
@@ -103,6 +115,8 @@ def add_member(request):
 
 @api_view(['POST'])
 def check_session(request):
+    """Check a session
+    """
     stripe.api_key = settings.STRIPE_SECRET_KEY
     error = ''
     try:
@@ -127,6 +141,8 @@ def check_session(request):
 
 @api_view(['POST'])
 def cancel_plan(request):
+    """Cancel a current team plan
+    """
     team = Team.objects.filter(members__in=[request.user]).first()
     plan_free = Plan.objects.get(name='Free')
 
@@ -144,26 +160,12 @@ def cancel_plan(request):
     return Response(serializer.data)
 
 
-def create_checkout_session(team, price_id):
-    checkout_session = stripe.checkout.Session.create(
-        client_reference_id=team.id,
-        success_url='%s?session_id={CHECKOUT_SESSION_ID}' % settings.FRONTEND_WEBSITE_SUCCESS_URL,
-        cancel_url='%s' % settings.FRONTEND_WEBSITE_CANCEL_URL,
-        payment_method_types=['card'],
-        mode='subscription',
-        line_items=[
-            {
-                    'price': price_id,
-                    'quantity': 1
-            }
-        ]
-    )
-
-    return checkout_session
 
 
 @api_view(['POST'])
 def create_checkout_session_and_upgrade_plan(request):
+    """Create chekcout session and upgrade plan
+    """
     stripe.api_key = settings.STRIPE_SECRET_KEY
     data = request.data
     plan = data['plan']
@@ -174,12 +176,10 @@ def create_checkout_session_and_upgrade_plan(request):
         if plan == 'smallteam':
             plan = Plan.objects.get(name='Small team')
             price_id = settings.STRIPE_PRICE_ID_SMALL_TEAM
-            checkout_session = create_checkout_session(team, price_id)
         else:
             plan = Plan.objects.get(name='Big team')
             price_id = settings.STRIPE_PRICE_ID_BIG_TEAM
-            checkout_session = create_checkout_session(team, price_id)
-
+        checkout_session = create_checkout_session(team, price_id)
         team.plan = plan
         team.save()
         serializer = TeamSerializer(team)
@@ -191,6 +191,8 @@ def create_checkout_session_and_upgrade_plan(request):
 
 @csrf_exempt
 def stripe_webhook(request):
+    """Stripe webhook for accepting payments
+    """
     stripe.api_key = settings.STRIPE_SECRET_KEY
     webhook_key = settings.STRIPE_WEBHOOK_KEY
     payload = request.body
