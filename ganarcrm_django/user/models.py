@@ -6,6 +6,8 @@ from django.utils.translation import gettext_lazy as _
 
 
 class CustomUserManager(BaseUserManager):
+    """Custom manager for users
+    """
 
     def create_user(self, email, password, **extra_fields):
         """
@@ -38,6 +40,8 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractUser):
+    """Custome user model
+    """
     username = None
     email = models.CharField(max_length=200, unique=True)
 

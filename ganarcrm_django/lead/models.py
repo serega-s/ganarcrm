@@ -6,6 +6,8 @@ User = get_user_model()
 
 
 class Lead(models.Model):
+    """Lead model
+    """
     NEW = 'new'
     CONTACTED = 'contacted'
     INPROGRESS = 'inprogress'
