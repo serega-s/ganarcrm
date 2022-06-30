@@ -5,6 +5,8 @@ User = get_user_model()
 
 
 class Plan(models.Model):
+    """Plan model
+    """
     name = models.CharField(max_length=255)
     max_leads = models.IntegerField(default=5)
     max_clients = models.IntegerField(default=5)
@@ -15,6 +17,8 @@ class Plan(models.Model):
 
 
 class Team(models.Model):
+    """Team model
+    """
     PLAN_ACTIVE = 'active'
     PLAN_CANCELLED = 'cancelled'
 
