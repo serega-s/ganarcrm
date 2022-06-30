@@ -6,6 +6,8 @@ User = get_user_model()
 
 
 class Client(models.Model):
+    """Client model
+    """
     team = models.ForeignKey(Team, related_name='clients',
                              on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
@@ -23,6 +25,8 @@ class Client(models.Model):
 
 
 class Note(models.Model):
+    """Note model
+    """
     created_by = models.ForeignKey(
         User, related_name="notes", on_delete=models.CASCADE)
     team = models.ForeignKey(Team, related_name='notes',
