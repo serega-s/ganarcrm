@@ -12,10 +12,14 @@ from .serializers import ClientSerializer, NoteSerializer
 
 
 class ClientPagination(PageNumberPagination):
+    """Pagination class for client queryset
+    """
     page_size = 10
 
 
 class ClientViewSet(viewsets.ModelViewSet):
+    """CRUD for clients
+    """
     serializer_class = ClientSerializer
     queryset = Client.objects.all()
     pagination_class = ClientPagination
@@ -32,6 +36,8 @@ class ClientViewSet(viewsets.ModelViewSet):
 
 
 class NoteViewSet(viewsets.ModelViewSet):
+    """CRUD for notes
+    """
     serializer_class = NoteSerializer
     queryset = Note.objects.all()
 
@@ -51,13 +57,15 @@ class NoteViewSet(viewsets.ModelViewSet):
 
 @api_view(['POST'])
 def convert_lead_to_client(request):
+    """Convery lead to client
+    """
     team = Team.objects.filter(members__in=[request.user]).first()
     lead_id = request.data['lead_id']
 
     try:
         lead = Lead.objects.filter(team=team).get(pk=lead_id)
-    except Lead.DoesNotExist:
-        raise Http404
+    except Lead.DoesNotExist as e:
+        raise Http404 from e
 
     client = Client.objects.create(team=team, name=lead.company, contact_person=lead.contact_person,
                                    email=lead.email, phone=lead.phone, website=lead.website, created_by=request.user)
@@ -67,6 +75,8 @@ def convert_lead_to_client(request):
 
 @api_view(['POST'])
 def delete_client(request, client_id):
+    """Delete a client
+    """
     team = Team.objects.filter(members__in=[request.user]).first()
 
     client = team.clients.filter(pk=client_id)
