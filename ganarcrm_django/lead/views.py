@@ -12,10 +12,13 @@ User = get_user_model()
 
 
 class LeadPagination(PageNumberPagination):
+    """Pagination class for leads queryset"""
     page_size = 2
 
 
 class LeadViewSet(viewsets.ModelViewSet):
+    """CRUD for leads
+    """
     serializer_class = LeadSerializer
     queryset = Lead.objects.all()
     pagination_class = LeadPagination
@@ -28,9 +31,7 @@ class LeadViewSet(viewsets.ModelViewSet):
 
     def perform_update(self, serializer):
         obj = self.get_object()
-        member_id = self.request.data['assigned_to']
-
-        if member_id:
+        if member_id := self.request.data['assigned_to']:
             user = User.objects.get(pk=member_id['id'])
             serializer.save(assigned_to=user)
         else:
@@ -43,6 +44,8 @@ class LeadViewSet(viewsets.ModelViewSet):
 
 @api_view(['POST'])
 def delete_lead(request, lead_id):
+    """Delete a lead
+    """
     team = Team.objects.filter(members__in=[request.user]).first()
 
     lead = team.leads.filter(pk=lead_id)
